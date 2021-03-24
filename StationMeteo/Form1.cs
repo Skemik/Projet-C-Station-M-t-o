@@ -23,6 +23,15 @@ namespace StationMeteo
         public Form1()
         {
             InitializeComponent();
+            this.userControlConfig = new UserControl_config();
+            this.userControlConfig.Location = new System.Drawing.Point(100, 50);
+            this.userControlConfig.Name = "userControlConfig";
+            this.userControlConfig.Size = new System.Drawing.Size(370, 393);
+            this.userControlConfig.TabIndex = 11;
+            this.userControlConfig.validerConfig.Click+= new System.EventHandler(sauverConfig_Click);
+            this.Controls.Add(userControlConfig);
+            userControlConfig.Visible = false;
+            this.userControlConfig.addConfig.Click+= new System.EventHandler(addConfig_Click);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -274,14 +283,15 @@ namespace StationMeteo
 
 
 
-        private void validerConfig_Click(object sender, EventArgs e)
+        public void sauverConfig_Click(object sender, EventArgs e)
         {
             int id;
             int intervalleMin;
             int intervalleMax;
-            int.TryParse(idConfig.Text, out id);
-            int.TryParse(intervMinConfig.Text, out intervalleMin);
-            int.TryParse(intervMaxConfig.Text, out intervalleMax);
+            
+            int.TryParse(userControlConfig.getIdConfig(), out id);
+            int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
+            int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
             ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
             check();
         }
@@ -317,15 +327,7 @@ namespace StationMeteo
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
             grid.Visible = true;
-            labelConfig1.Visible = false;
-            labelConfig2.Visible = false;
-            labelConfig3.Visible = false;
-            labelConfig4.Visible = false;
-            idConfig.Visible = false;
-            intervMinConfig.Visible = false;
-            intervMaxConfig.Visible = false;
-            addConfig.Visible = false;
-            validerConfig.Visible = false;
+            userControlConfig.Visible = false;
         }
 
         private void addConfig_Click(object sender, EventArgs e)
@@ -333,9 +335,9 @@ namespace StationMeteo
             int id;
             int intervalleMin;
             int intervalleMax;
-            int.TryParse(idConfig.Text, out id);
-            int.TryParse(intervMinConfig.Text, out intervalleMin);
-            int.TryParse(intervMaxConfig.Text, out intervalleMax);
+            int.TryParse(userControlConfig.getIdConfig(), out id);
+            int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
+            int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
             ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
         }
     }

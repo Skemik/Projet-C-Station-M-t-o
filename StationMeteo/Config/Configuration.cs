@@ -15,6 +15,8 @@ namespace StationMeteo
 {
 	public partial class Form1
 	{
+		private UserControl_config userControlConfig;
+
 		public void check()
 		{
 			String contenu = "Les lignes sont composé de cette forme la id;type;intervalleMin;intervalleMax;alarmeMin;alarmeMax\r\nDebut\r\n";
@@ -62,15 +64,10 @@ namespace StationMeteo
 		public void sauvegarderConfig(object sender, EventArgs e)
 		{
 			grid.Visible = false;
-			labelConfig1.Visible = true;
-			labelConfig2.Visible = true;
-			labelConfig3.Visible = true;
-			labelConfig4.Visible = true;
-			idConfig.Visible = true;
-			intervMinConfig.Visible = true;
-			intervMaxConfig.Visible = true;
-			addConfig.Visible = true;
-			validerConfig.Visible = true;
+			userControlConfig.Visible = true;
+
+
+
 		}
 
 		public void chargerConfig(object sender, EventArgs e)
