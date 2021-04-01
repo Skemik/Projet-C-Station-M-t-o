@@ -16,6 +16,7 @@ namespace StationMeteo
 	public partial class Form1
 	{
 		private UserControl_config userControlConfig;
+		
 
 		public void check()
 		{
@@ -65,6 +66,8 @@ namespace StationMeteo
 		{
 			grid.Visible = false;
 			userControlConfig.Visible = true;
+			graphiqueOuvert = false;
+			graphControl1.Visible = false;
 
 
 
@@ -107,6 +110,50 @@ namespace StationMeteo
 
 				}
 			}
+		}
+
+		public void sauverConfig_Click(object sender, EventArgs e)
+		{
+			int id;
+			int intervalleMin;
+			int intervalleMax;
+
+			int.TryParse(userControlConfig.getIdConfig(), out id);
+			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
+			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
+			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
+			check();
+		}
+
+		public void ChargerConfigDansLesTrames(int id, int intervalleMin, int intervalleMax)
+		{
+			if (id < 11 && id > 0)
+			{
+				foreach (IdBase trame in listeTram)
+				{
+
+
+					if (trame.id == id)
+					{
+						((IdMesure)trame).intervalleMin = intervalleMin;
+						((IdMesure)trame).intervalleMax = intervalleMax;
+						MettreAJourGrid(((IdMesure)trame));
+						calculDataconvertiTrame(((IdMesure)trame));
+
+					}
+				}
+			}
+		}
+
+		private void addConfig_Click(object sender, EventArgs e)
+		{
+			int id;
+			int intervalleMin;
+			int intervalleMax;
+			int.TryParse(userControlConfig.getIdConfig(), out id);
+			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
+			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
+			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
 		}
 
 	}
