@@ -18,7 +18,7 @@ namespace StationMeteo
 		private UserControl_config userControlConfig;
 		
 
-		public void check()
+		public void sauvegarderConfigDansUnFichier()
 		{
 			String contenu = "Les lignes sont composé de cette forme la id;type;intervalleMin;intervalleMax;alarmeMin;alarmeMax\r\nDebut\r\n";
 			foreach (IdBase trame in listeTram)
@@ -31,29 +31,32 @@ namespace StationMeteo
 
 			}
 			contenu += "Fin";
-			MessageBox.Show("Contenu : "+contenu);
-
-			
 			using(SaveFileDialog monSauvegardeur= new SaveFileDialog())
 			{
 				String path =Directory.GetCurrentDirectory();
-				MessageBox.Show(path);
 				monSauvegardeur.InitialDirectory = "..\\..\\"+path;
 				monSauvegardeur.Filter= "CSV file (*.csv)|*.csv| All Files (*.*)|*.*";
 				monSauvegardeur.Title = "Sauvegarder Configuration";
 				monSauvegardeur.FilterIndex = 2;
-
 				if (monSauvegardeur.ShowDialog() == DialogResult.OK)
 				{
 					
 					var file = monSauvegardeur.OpenFile();
-					using (StreamWriter writer = new StreamWriter(file))
-					{
-						writer.Write(contenu);
-					}
-						///RETRAVAILLER ICIIII;
-					
-					
+                    try
+                    {
+						using (StreamWriter writer = new StreamWriter(file))
+						{
+							writer.Write(contenu);
+						}
+                    }
+                    catch(NullReferenceException e)
+                    {
+						MessageBox.Show("Réference nulle !");
+                    }
+                    catch(Exception e)
+                    {
+						MessageBox.Show(e.Message);
+                    }	
 				}
 
 			}
@@ -82,32 +85,44 @@ namespace StationMeteo
 				monChargeur.Filter = "CSV file (*.csv)|*.csv| All Files (*.*)|*.*";
 				monChargeur.Title = "Charger Configuration";
 				monChargeur.FilterIndex = 2;
+				
 				if (monChargeur.ShowDialog() == DialogResult.OK)
 				{
 
 					var file = monChargeur.OpenFile();
-					using (StreamReader reader = new StreamReader(file))
+					try
 					{
-						int[] tableau = new int[10];
-						String line = reader.ReadLine();
-						bool read = false;
-						while (line != null)
+
+
+						using (StreamReader reader = new StreamReader(file))
 						{
-							if (line.Contains("Debut"))
+							int[] tableau = new int[10];
+							String line = reader.ReadLine();
+							bool read = false;
+							while (line != null)
 							{
-								read = true;
+								if (line.Contains("Debut"))
+								{
+									read = true;
+								}
+								line = reader.ReadLine();
+								if (line != null && line.Contains(";"))
+								{
+									tableau = Array.ConvertAll(line.Split(';'), int.Parse);
+									ChargerConfigDansLesTrames(tableau[0], tableau[2], tableau[3]);
+								}
 							}
-							line = reader.ReadLine();
-							if (line!=null && line.Contains(";"))
-							{
-								tableau = Array.ConvertAll(line.Split(';'), int.Parse);
-								ChargerConfigDansLesTrames(tableau[0], tableau[2], tableau[3]);
-							}
+
 						}
-						
 					}
-
-
+					catch (NullReferenceException s)
+					{
+						MessageBox.Show("La référence n'existe pas !");
+					}
+					catch (Exception s)
+                    {
+						MessageBox.Show(s.Message);
+                    }
 				}
 			}
 		}
@@ -117,12 +132,11 @@ namespace StationMeteo
 			int id;
 			int intervalleMin;
 			int intervalleMax;
-
 			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
 			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
 			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
-			check();
+			sauvegarderConfigDansUnFichier();
 		}
 
 		public void ChargerConfigDansLesTrames(int id, int intervalleMin, int intervalleMax)
@@ -150,8 +164,8 @@ namespace StationMeteo
 			int id;
 			int intervalleMin;
 			int intervalleMax;
-			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
+			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
 			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
 		}

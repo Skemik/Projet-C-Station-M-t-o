@@ -47,10 +47,8 @@ namespace StationMeteo
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.sauvegarderConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label_checksum = new System.Windows.Forms.Label();
             this.graphControl1 = new StationMeteo.GraphControl();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -72,7 +70,7 @@ namespace StationMeteo
             this.grid.Location = new System.Drawing.Point(12, 61);
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
-            this.grid.Size = new System.Drawing.Size(677, 359);
+            this.grid.Size = new System.Drawing.Size(677, 153);
             this.grid.TabIndex = 0;
             this.grid.Visible = false;
             // 
@@ -192,20 +190,11 @@ namespace StationMeteo
             this.sauvegarderConfigurationToolStripMenuItem.Text = "Sauvegarder Configuration";
             this.sauvegarderConfigurationToolStripMenuItem.Click += new System.EventHandler(this.sauvegarderConfig);
             // 
-            // label_checksum
-            // 
-            this.label_checksum.AutoSize = true;
-            this.label_checksum.Location = new System.Drawing.Point(615, 33);
-            this.label_checksum.Name = "label_checksum";
-            this.label_checksum.Size = new System.Drawing.Size(151, 13);
-            this.label_checksum.TabIndex = 10;
-            this.label_checksum.Text = "Nombre d\'erreurs CheckSum : ";
-            // 
             // graphControl1
             // 
             this.graphControl1.Location = new System.Drawing.Point(12, 33);
             this.graphControl1.Name = "graphControl1";
-            this.graphControl1.Size = new System.Drawing.Size(657, 405);
+            this.graphControl1.Size = new System.Drawing.Size(432, 405);
             this.graphControl1.TabIndex = 11;
             this.graphControl1.Visible = false;
             // 
@@ -215,23 +204,12 @@ namespace StationMeteo
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(718, 133);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "label1";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.graphControl1);
-            this.Controls.Add(this.label_checksum);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.grid);
             this.MainMenuStrip = this.menuStrip1;
@@ -266,10 +244,8 @@ namespace StationMeteo
         private System.Windows.Forms.ToolStripMenuItem iD3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iD4ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iD5ToolStripMenuItem;
-        private System.Windows.Forms.Label label_checksum;
         private GraphControl graphControl1;
         public System.Windows.Forms.Timer timer;
-        public System.Windows.Forms.Label label1;
     }
 }
 

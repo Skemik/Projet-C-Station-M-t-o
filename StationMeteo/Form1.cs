@@ -15,8 +15,10 @@ namespace StationMeteo
     public partial class Form1 : Form
     {
 
-        int erreurCheckSum;
-        
+        int gridColumns = 5;
+        int gridRows = 1;
+        int boxwidth = 125;
+        int boxheight = 25;
         List<byte> tableInter = new List<byte>();
         DataTable dt = new DataTable();
         static ArrayList listeTram = new ArrayList();
@@ -41,14 +43,39 @@ namespace StationMeteo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            grid.ColumnCount = 9;
-            grid.Rows.Add("id", "nbrData", "type", "data", "Alarme");
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(displayDataOnGrid);
-            serialPort.Open();
+            grid.ColumnCount = gridColumns;
+            grid.Rows.Add("ID", "TYPE", "DATA CONVERTIE", "INTERVALLE MIN", "INTERVALLE MAX");
+            for (int i = 0; i < gridColumns; i++)
+            {
+                grid.Columns[i].Width = boxwidth;
+                
+                
+            }
+            for (int i = 0; i < grid.RowCount; i++)
+            {
+                grid.Rows[i].Height = boxheight;
+
+            }
+            grid.Width = boxwidth * gridColumns + 3;
+            grid.Height = boxheight*gridRows+3;
+            try
+            {
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(recupererDonneeBuffer);
+                serialPort.Open();
+            }
+            catch (NullReferenceException d)
+            {
+                MessageBox.Show("Le port choisi n'existe pas !");
+            }
+            catch (Exception d)
+            {
+                MessageBox.Show(d.Message);
+            }
+            
 
         }
 
-        private void displayDataOnGrid(object sender, SerialDataReceivedEventArgs e)
+        private void recupererDonneeBuffer(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] tab;
             int count = serialPort.BytesToRead;
@@ -58,39 +85,61 @@ namespace StationMeteo
             {
                 tableInter.Add(tab[i]);
             }
-            
+
+
         }
 
         private void timer_Tick(object sender, EventArgs e)
-        {
-            for (int i = 0; i < tableInter.Count; i++)
+        {          
+            int i = 0;
+            while (tableInter.Count != 0)
             {
-                if (i + 11 < tableInter.Count && tableInter[i] == 85 && tableInter[i + 1] == 170 && tableInter[i + 2] == 85 && tableInter[i + 3] < 11 && tableInter[(i + 7) + tableInter[i + 4]] == 170 && tableInter[(i + 8) + tableInter[i + 4]] == 85 && tableInter[(i + 9) + tableInter[i + 4]] == 170)
+                if (verifSiTrameCorrecte())
                 {
-                    int longueurTrame = 10 + tableInter[i + 4];
-                    instantierTrame(longueurTrame, i);
+                    
+                        int longueurTrame = 10 + tableInter[i + 4];
+                        instantierTrame(longueurTrame, i);
+                }
+                else
+                {
+                    tableInter.RemoveAt(0);
                 }
             }
+        }
+        
+      
+        
+
+        private Boolean verifSiTrameCorrecte()
+        {
+
+            if (tableInter.Count > 9 && tableInter[0] == 85 && tableInter[1] == 170 && tableInter[2] == 85 && tableInter[3] <= 50)
+            {
+                int debutDeFinDeTrame = 7 + tableInter[4];
+                if (debutDeFinDeTrame + 2 < tableInter.Count && tableInter[debutDeFinDeTrame] == 170 && tableInter[debutDeFinDeTrame + 1] == 85 && tableInter[debutDeFinDeTrame + 2] == 170)
+                {
+                    return true;
+                }
+            }
+                return false;
         }
 
 
         public void instantierTrame(int longueurTrame, int indiceTramDansTab)
         {
-            int id = tableInter[indiceTramDansTab + 3];
-            int nbr = tableInter[indiceTramDansTab + 4];
-            int type = tableInter[indiceTramDansTab + 5];
-            byte cheksum = 0;
+            int id = tableInter[3];
+            int nbr = tableInter[4];
+            int type = tableInter[5];
             ulong data = 0;
             int data0 = 0;
             int data1 = 0;
             int data2 = 0;
             int data3 = 0;
-
+            
             if (nbr > 0)
             {
                 data0 = tableInter[indiceTramDansTab + 6];
                 data = (ulong)data0;
-                cheksum = tableInter[indiceTramDansTab + 7];
             }
             if (nbr > 1)
             {
@@ -98,7 +147,6 @@ namespace StationMeteo
                 ulong temp = (ulong)data1;
                 temp <<= 8;
                 data += temp;
-                cheksum = tableInter[indiceTramDansTab + 8];
             }
             if (nbr > 2)
             {
@@ -106,7 +154,6 @@ namespace StationMeteo
                 ulong temp = (ulong)data2;
                 temp <<= 16;
                 data += temp;
-                cheksum = tableInter[indiceTramDansTab + 9];
             }
             if (nbr > 3)
             {
@@ -114,32 +161,22 @@ namespace StationMeteo
                 ulong temp = (ulong)data3;
                 temp <<= 24;
                 data += temp;
-                cheksum = tableInter[indiceTramDansTab + 10];
             }
-            byte checksumCalculer = (byte)(id + nbr + type + data0 + data1 + data2 + data3);
 
-            if (cheksum != checksumCalculer)
+            if (tableInter[3] == 50)
             {
-                erreurCheckSum++;
-                label_checksum.Text = "Nombre d'erreurs CheckSum : " + erreurCheckSum;
+                placerTrameAlarme(id, nbr,type, data, 0, 0, 0);
             }
-            //MessageBox.Show(data.ToString());
-            if (tableInter[indiceTramDansTab + 3] == 0)
+            else if (tableInter[3] == 0)
             {
-                //MessageBox.Show("Je vais créer un id de base");
                 placerTrameKeepAlive(id, nbr, type, data);
 
             }
-            else if (tableInter[indiceTramDansTab + 3] < 11)
+            else if (tableInter[3] < 11)
             {
-                //MessageBox.Show("Je vais créer un id de mesure");
                 placerTrameMesure(id, nbr, type, data);
             }
-            else if (tableInter[indiceTramDansTab + 3] == 50)
-            {
-                //MessageBox.Show("Je vais créer un id d'alarme");
-                placerTrameAlarme(0, 0, 0, 0, 0, 0, 0);
-            }
+
             supprimerTrameTableauByte(longueurTrame);
         }
 
@@ -162,7 +199,6 @@ namespace StationMeteo
                     trame.type = type;
                     trame.data = data;
                     placer = true;
-                    MettreAJourGrid(trame);
                 }
             }
             if (!placer)
@@ -171,10 +207,9 @@ namespace StationMeteo
                 listeTram.Add(trame);
                 DataGridViewRow row = (DataGridViewRow)grid.Rows[0].Clone();
                 row.Cells[0].Value = trame.id;
-                row.Cells[1].Value = trame.nbData;
-                row.Cells[2].Value = trame.type;
-                row.Cells[3].Value = trame.data;
-                row.Cells[4].Value = trame.alarme;
+                row.Cells[1].Value = "Keep Alive";
+                gridRows++;
+                grid.Height = boxheight * gridRows + 3;
                 grid.Invoke((MethodInvoker)(() => grid.Rows.Add(row)));
             }
         }
@@ -186,22 +221,33 @@ namespace StationMeteo
             {
                 if (trame.id == id && !placer)
                 {
-                    IdAlarme trameCorrecte = (IdAlarme)trame;
-                    trameCorrecte.nbData = nbr;
-                    trameCorrecte.type = type;
-                    trameCorrecte.data = data;
-                    trameCorrecte.idAl = idAlarme;
-                    trameCorrecte.typeAlarme = typeAlarme;
-                    trameCorrecte.etat = etat;
-                    placer = true;
+                      IdAlarme trameCorrecte = (IdAlarme)trame;
+                      trameCorrecte.nbData = nbr;
+                      trameCorrecte.type = type;
+                      trameCorrecte.data = data;
+                      trameCorrecte.idAl = idAlarme;
+                      trameCorrecte.typeAlarme = typeAlarme;
+                      trameCorrecte.etat = etat;
+                      placer = true;
                     MettreAJourGrid(trameCorrecte);
 
                 }
             }
             if (!placer)
             {
-                IdAlarme trame = new IdAlarme(0, 0, 0);
+                IdAlarme trame = new IdAlarme();
+                trame.id = id;
+                trame.nbData = nbr;
+                trame.type = type;
+                trame.data = data;
                 listeTram.Add(trame);
+                DataGridViewRow row = (DataGridViewRow)grid.Rows[0].Clone();
+                row.Cells[0].Value = trame.id;
+                row.Cells[1].Value = trame.type;
+                gridRows++;
+                grid.Height = boxheight * gridRows + 3;
+                grid.Invoke((MethodInvoker)(() => grid.Rows.Add(row)));
+                
 
             }
         }
@@ -219,13 +265,11 @@ namespace StationMeteo
                     trameCorrecte.dataConverti = calculDataconvertiTrame(trameCorrecte);
                     placer = true;
                     MettreAJourGrid(trameCorrecte);
-                    if (trameCorrecte.id == idgraphiqueAAfficher&&graphControl1.Visible)
+                    if (trameCorrecte.id == idgraphiqueAAfficher&&graphiqueOuvert)
                     {
-                        nbAAfficherGraphique.Add((int)trameCorrecte.dataConverti);
-                        afficherGraphique();
-                       
+                        graphControl1.ajoutervaleur((int)trameCorrecte.dataConverti,trameCorrecte.id);
+
                     }
-                    //verifupdateGraphique(trameCorrecte.id, trameCorrecte.dataConverti);
                 }
             }
             if (!placer)
@@ -239,26 +283,23 @@ namespace StationMeteo
                 listeTram.Add(trame);
                 DataGridViewRow row = (DataGridViewRow)grid.Rows[0].Clone();
                 row.Cells[0].Value = trame.id;
-                row.Cells[1].Value = trame.nbData;
-                row.Cells[2].Value = trame.type;
-                row.Cells[3].Value = trame.data;
-                row.Cells[4].Value = trame.alarme;
-                row.Cells[5].Value = trame.intervalleMin;
-                row.Cells[6].Value = trame.intervalleMax;
+                row.Cells[1].Value = trame.type;
+                row.Cells[3].Value = trame.intervalleMin;
+                row.Cells[4].Value = trame.intervalleMax;
+                gridRows++;
+                grid.Height = boxheight * gridRows + 3;
                 grid.Invoke((MethodInvoker)(() => grid.Rows.Add(row)));
-                if (trame.id == idgraphiqueAAfficher && graphControl1.Visible)
+                if (trame.id == idgraphiqueAAfficher && graphiqueOuvert)
                 {
                    
-                    nbAAfficherGraphique.Add((int)trame.dataConverti);
-                    afficherGraphique();
+                    graphControl1.ajoutervaleur((int)trame.dataConverti, trame.id);
                 }
-                //verifupdateGraphique(trame.id, trame.dataConverti);
             }
 
 
         }
 
-        private void MettreAJourGrid(IdBase trame)
+        private void MettreAJourGrid(IdAlarme trame)
         {
             for (int i = 0; i < grid.Rows.Count; i++)
             {
@@ -266,17 +307,16 @@ namespace StationMeteo
                 {
                     if (j == 0 && grid.Rows[i].Cells[j].Value.ToString() == trame.id.ToString())
                     {
-                        grid.Rows[i].Cells[j + 1].Value = trame.nbData;
-                        grid.Rows[i].Cells[j + 2].Value = trame.type;
-                        grid.Rows[i].Cells[j + 3].Value = trame.data;
-                        grid.Rows[i].Cells[j + 4].Value = trame.alarme;
+                        grid.Rows[i].Cells[j + 1].Value = "Alarme";
                     }
 
                 }
             }
-            
+
+
 
         }
+
         private void MettreAJourGrid(IdMesure trame)
         {
             for (int i = 0; i < grid.Rows.Count; i++)
@@ -284,20 +324,33 @@ namespace StationMeteo
                 for (int j = 0; j < grid.Columns.Count; j++)
                 {
                     if (j == 0 && grid.Rows[i].Cells[j].Value.ToString() == trame.id.ToString())
-                    {
-                        grid.Rows[i].Cells[j + 1].Value = trame.nbData;
-                        grid.Rows[i].Cells[j + 2].Value = trame.type;
-                        grid.Rows[i].Cells[j + 3].Value = trame.data;
-                        grid.Rows[i].Cells[j + 4].Value = trame.alarme;
-                        grid.Rows[i].Cells[j + 5].Value = trame.intervalleMin;
-                        grid.Rows[i].Cells[j + 6].Value = trame.intervalleMax;
-                        grid.Rows[i].Cells[j + 7].Value = trame.dataConverti;
+                    {                      
+                        grid.Rows[i].Cells[j + 3].Value = trame.intervalleMin;
+                        grid.Rows[i].Cells[j + 4].Value = trame.intervalleMax;
+                        grid.Rows[i].Cells[j + 2].Value = trame.dataConverti;
+                        if (trame.type == 1)
+                        {
+                            grid.Rows[i].Cells[j + 1].Value = "Température";
+                        }
+                        else if (trame.type == 2)
+                        {
+                            grid.Rows[i].Cells[j + 1].Value = "Humidité";
+                        }
+                        else if (trame.type == 3)
+                        {
+                            grid.Rows[i].Cells[j + 1].Value = "Pression atmosphérique";
+                        }
+                        else if (trame.type == 4)
+                        {
+                            grid.Rows[i].Cells[j + 1].Value = "Luminosité";
+                        }
                     }
 
                 }
             }
-        }
 
+            
+        }
 
         private float calculDataconvertiTrame(IdMesure trame)
         {
