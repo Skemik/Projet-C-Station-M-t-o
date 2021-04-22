@@ -36,6 +36,10 @@ namespace StationMeteo
             this.Controls.Add(userControlConfig);
             userControlConfig.Visible = false;
             this.userControlConfig.addConfig.Click += new System.EventHandler(addConfig_Click);
+            creerUserTable();
+            creerAccesTable();
+            MakeDataRelation();
+            BindToDataGrid();
 
 
         }
@@ -112,16 +116,16 @@ namespace StationMeteo
 
         private Boolean verifSiTrameCorrecte()
         {
-
+            Boolean bReturn = false;
             if (tableInter.Count > 9 && tableInter[0] == 85 && tableInter[1] == 170 && tableInter[2] == 85 && tableInter[3] <= 50)
             {
                 int debutDeFinDeTrame = 7 + tableInter[4];
                 if (debutDeFinDeTrame + 2 < tableInter.Count && tableInter[debutDeFinDeTrame] == 170 && tableInter[debutDeFinDeTrame + 1] == 85 && tableInter[debutDeFinDeTrame + 2] == 170)
                 {
-                    return true;
+                    bReturn = true;
                 }
             }
-                return false;
+                return bReturn;
         }
 
 

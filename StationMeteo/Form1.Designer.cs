@@ -47,11 +47,21 @@ namespace StationMeteo
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.sauvegarderConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.graphControl1 = new StationMeteo.GraphControl();
+            this.gestionUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.afficherLesUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seConnecterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.grid_userTable = new System.Windows.Forms.DataGridView();
+            this.grid_accessTable = new System.Windows.Forms.DataGridView();
+            this.dataSetUtilisateur = new System.Data.DataSet();
+            this.userControl_Connexion = new StationMeteo.Utilisateur.UserControl_Connexion();
+            this.graphControl1 = new StationMeteo.GraphControl();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_userTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_accessTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSetUtilisateur)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort
@@ -106,7 +116,8 @@ namespace StationMeteo
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.voirGrid,
             this.voirGraphiqueToolStripMenuItem,
-            this.configurationToolStripMenuItem});
+            this.configurationToolStripMenuItem,
+            this.gestionUtilisateursToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -190,6 +201,80 @@ namespace StationMeteo
             this.sauvegarderConfigurationToolStripMenuItem.Text = "Sauvegarder Configuration";
             this.sauvegarderConfigurationToolStripMenuItem.Click += new System.EventHandler(this.sauvegarderConfig);
             // 
+            // gestionUtilisateursToolStripMenuItem
+            // 
+            this.gestionUtilisateursToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.afficherLesUtilisateursToolStripMenuItem,
+            this.seConnecterToolStripMenuItem});
+            this.gestionUtilisateursToolStripMenuItem.Name = "gestionUtilisateursToolStripMenuItem";
+            this.gestionUtilisateursToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
+            this.gestionUtilisateursToolStripMenuItem.Text = "Gestion Utilisateurs";
+            // 
+            // afficherLesUtilisateursToolStripMenuItem
+            // 
+            this.afficherLesUtilisateursToolStripMenuItem.Name = "afficherLesUtilisateursToolStripMenuItem";
+            this.afficherLesUtilisateursToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.afficherLesUtilisateursToolStripMenuItem.Text = "Afficher les Utilisateurs";
+            this.afficherLesUtilisateursToolStripMenuItem.Click += new System.EventHandler(this.afficherUtilisateurs);
+            // 
+            // seConnecterToolStripMenuItem
+            // 
+            this.seConnecterToolStripMenuItem.Name = "seConnecterToolStripMenuItem";
+            this.seConnecterToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.seConnecterToolStripMenuItem.Text = "Se connecter";
+            this.seConnecterToolStripMenuItem.Click += new System.EventHandler(this.seConnecter);
+            // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
+            // grid_userTable
+            // 
+            this.grid_userTable.AllowUserToAddRows = false;
+            this.grid_userTable.AllowUserToDeleteRows = false;
+            this.grid_userTable.AllowUserToOrderColumns = true;
+            this.grid_userTable.AllowUserToResizeColumns = false;
+            this.grid_userTable.AllowUserToResizeRows = false;
+            this.grid_userTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grid_userTable.Location = new System.Drawing.Point(12, 48);
+            this.grid_userTable.Name = "grid_userTable";
+            this.grid_userTable.ReadOnly = true;
+            this.grid_userTable.RowHeadersVisible = false;
+            this.grid_userTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.grid_userTable.Size = new System.Drawing.Size(538, 193);
+            this.grid_userTable.TabIndex = 12;
+            this.grid_userTable.Visible = false;
+            // 
+            // grid_accessTable
+            // 
+            this.grid_accessTable.AllowUserToAddRows = false;
+            this.grid_accessTable.AllowUserToDeleteRows = false;
+            this.grid_accessTable.AllowUserToOrderColumns = true;
+            this.grid_accessTable.AllowUserToResizeColumns = false;
+            this.grid_accessTable.AllowUserToResizeRows = false;
+            this.grid_accessTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grid_accessTable.Location = new System.Drawing.Point(12, 247);
+            this.grid_accessTable.Name = "grid_accessTable";
+            this.grid_accessTable.RowHeadersVisible = false;
+            this.grid_accessTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.grid_accessTable.Size = new System.Drawing.Size(538, 191);
+            this.grid_accessTable.TabIndex = 13;
+            this.grid_accessTable.Visible = false;
+            // 
+            // dataSetUtilisateur
+            // 
+            this.dataSetUtilisateur.DataSetName = "NewDataSet";
+            // 
+            // userControl_Connexion
+            // 
+            this.userControl_Connexion.Location = new System.Drawing.Point(12, 27);
+            this.userControl_Connexion.Name = "userControl_Connexion";
+            this.userControl_Connexion.Size = new System.Drawing.Size(364, 367);
+            this.userControl_Connexion.TabIndex = 14;
+            this.userControl_Connexion.Visible = false;
+            // 
             // graphControl1
             // 
             this.graphControl1.Location = new System.Drawing.Point(12, 33);
@@ -198,17 +283,14 @@ namespace StationMeteo
             this.graphControl1.TabIndex = 11;
             this.graphControl1.Visible = false;
             // 
-            // timer
-            // 
-            this.timer.Enabled = true;
-            this.timer.Interval = 1000;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.userControl_Connexion);
+            this.Controls.Add(this.grid_accessTable);
+            this.Controls.Add(this.grid_userTable);
             this.Controls.Add(this.graphControl1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.grid);
@@ -220,6 +302,9 @@ namespace StationMeteo
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_userTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_accessTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSetUtilisateur)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,6 +331,13 @@ namespace StationMeteo
         private System.Windows.Forms.ToolStripMenuItem iD5ToolStripMenuItem;
         private GraphControl graphControl1;
         public System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.DataGridView grid_userTable;
+        private System.Windows.Forms.DataGridView grid_accessTable;
+        private System.Data.DataSet dataSetUtilisateur;
+        private System.Windows.Forms.ToolStripMenuItem gestionUtilisateursToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem afficherLesUtilisateursToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seConnecterToolStripMenuItem;
+        private Utilisateur.UserControl_Connexion userControl_Connexion;
     }
 }
 
