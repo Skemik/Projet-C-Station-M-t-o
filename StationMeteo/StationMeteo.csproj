@@ -85,6 +85,12 @@
     <Compile Include="Utilisateur\UserControl_Connexion.Designer.cs">
       <DependentUpon>UserControl_Connexion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utilisateur\UserControl_NouveauUtilisateur.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utilisateur\UserControl_NouveauUtilisateur.Designer.cs">
+      <DependentUpon>UserControl_NouveauUtilisateur.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Utilisateur\UserControl_Connexion.resx">
       <DependentUpon>UserControl_Connexion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilisateur\UserControl_NouveauUtilisateur.resx">
+      <DependentUpon>UserControl_NouveauUtilisateur.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

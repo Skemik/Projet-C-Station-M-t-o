@@ -50,10 +50,12 @@ namespace StationMeteo
             this.gestionUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.afficherLesUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.seConnecterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ajouterUnUtilisateurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.grid_userTable = new System.Windows.Forms.DataGridView();
             this.grid_accessTable = new System.Windows.Forms.DataGridView();
             this.dataSetUtilisateur = new System.Data.DataSet();
+            this.userControl_newuser = new StationMeteo.Utilisateur.UserControl_NouveauUtilisateur();
             this.userControl_Connexion = new StationMeteo.Utilisateur.UserControl_Connexion();
             this.graphControl1 = new StationMeteo.GraphControl();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -205,7 +207,8 @@ namespace StationMeteo
             // 
             this.gestionUtilisateursToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.afficherLesUtilisateursToolStripMenuItem,
-            this.seConnecterToolStripMenuItem});
+            this.seConnecterToolStripMenuItem,
+            this.ajouterUnUtilisateurToolStripMenuItem});
             this.gestionUtilisateursToolStripMenuItem.Name = "gestionUtilisateursToolStripMenuItem";
             this.gestionUtilisateursToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
             this.gestionUtilisateursToolStripMenuItem.Text = "Gestion Utilisateurs";
@@ -223,6 +226,13 @@ namespace StationMeteo
             this.seConnecterToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.seConnecterToolStripMenuItem.Text = "Se connecter";
             this.seConnecterToolStripMenuItem.Click += new System.EventHandler(this.seConnecter);
+            // 
+            // ajouterUnUtilisateurToolStripMenuItem
+            // 
+            this.ajouterUnUtilisateurToolStripMenuItem.Name = "ajouterUnUtilisateurToolStripMenuItem";
+            this.ajouterUnUtilisateurToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.ajouterUnUtilisateurToolStripMenuItem.Text = "Ajouter un Utilisateur";
+            this.ajouterUnUtilisateurToolStripMenuItem.Click += new System.EventHandler(this.afficherAjouterUnUtilisateurClick);
             // 
             // timer
             // 
@@ -267,6 +277,14 @@ namespace StationMeteo
             // 
             this.dataSetUtilisateur.DataSetName = "NewDataSet";
             // 
+            // userControl_newuser
+            // 
+            this.userControl_newuser.Location = new System.Drawing.Point(12, 33);
+            this.userControl_newuser.Name = "userControl_newuser";
+            this.userControl_newuser.Size = new System.Drawing.Size(294, 299);
+            this.userControl_newuser.TabIndex = 15;
+            this.userControl_newuser.Visible = false;
+            // 
             // userControl_Connexion
             // 
             this.userControl_Connexion.Location = new System.Drawing.Point(12, 27);
@@ -288,6 +306,7 @@ namespace StationMeteo
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.userControl_newuser);
             this.Controls.Add(this.userControl_Connexion);
             this.Controls.Add(this.grid_accessTable);
             this.Controls.Add(this.grid_userTable);
@@ -337,6 +356,8 @@ namespace StationMeteo
         private System.Windows.Forms.ToolStripMenuItem gestionUtilisateursToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem afficherLesUtilisateursToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seConnecterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ajouterUnUtilisateurToolStripMenuItem;
+        private Utilisateur.UserControl_NouveauUtilisateur userControl_newuser;
         private Utilisateur.UserControl_Connexion userControl_Connexion;
     }
 }

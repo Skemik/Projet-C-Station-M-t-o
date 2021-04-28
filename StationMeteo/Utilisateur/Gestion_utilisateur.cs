@@ -9,14 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Collections;
+using System.Data.OleDb;
 
 namespace StationMeteo
 {
 	public partial class Form1
 	{
 		DataTable userTable=new DataTable("userTable");
-		DataTable accessTable=new DataTable("accessTable");
+		public DataTable accessTable=new DataTable("accessTable");
 		DataColumn colonne = new DataColumn();
+		internal static string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;"
+										+
+										@"Data Source=..\..\..\DB_UserAccess.accdb;Cache Authentication=True";
 
 		public void creerUserTable()
         {
@@ -60,7 +64,7 @@ namespace StationMeteo
 		instance["UserName"] = "Hakan";
 		instance["UserPassword"] = "Helb123";
 		instance["Access_ID"] = 0;
-		userTable.Rows.Add(instance);
+		//userTable.Rows.Add(instance);
 		dataSetUtilisateur.Tables.Add(userTable);
 		}
 
@@ -122,7 +126,7 @@ namespace StationMeteo
 			colonne.ColumnName = "UserCreation";
 			accessTable.Columns.Add(colonne);
 			
-			instance = accessTable.NewRow();
+			/*instance = accessTable.NewRow();
 			instance["ID"] = 0;
 			instance["Name"] = "AdminRights";
 			instance["AllowCreateID"] = "true";
@@ -165,7 +169,7 @@ namespace StationMeteo
 			instance["AllowDestroyID"] = "false";
 			instance["AllowConfigAlarm"] = "false";
 			instance["UserCreation"] = "false";
-			accessTable.Rows.Add(instance);
+			accessTable.Rows.Add(instance);*/
 
 			dataSetUtilisateur.Tables.Add(accessTable);
 		}
@@ -219,6 +223,208 @@ namespace StationMeteo
 		private void seConnecter(object sender, EventArgs e)
 		{
 			userControl_Connexion.Visible = true;
+		}
+		
+		private void recupererUtilisateursDeLaBd()
+		{
+			string CommandText = "SELECT * from UserTable " + "WHERE AccessKey_Id = " + "1 " + "ORDER BY UserName;";
+
+			userTable.Rows.Clear();
+
+			using (OleDbConnection connection = new OleDbConnection(connectionString))
+			{
+				OleDbCommand DBCommand = new OleDbCommand(CommandText, connection);
+
+				try
+				{
+					connection.Open();
+
+					OleDbDataReader DBReader = DBCommand.ExecuteReader();
+
+					if (DBReader.HasRows)
+					{
+						while (DBReader.Read())
+						{
+							userTable.Rows.Add(new object[] { DBReader[0], DBReader[1], DBReader[2], DBReader[3]});
+						}
+					}
+
+					DBReader.Close();
+					connection.Close();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+
+			/*			grid_userTable.DataSource = userTable;*/
+		}
+		private void recupererAccesDeLaBd()
+		{
+			string CommandText = "SELECT * from AccessTable;";
+
+			userTable.Rows.Clear();
+
+			using (OleDbConnection connection = new OleDbConnection(connectionString))
+			{
+				OleDbCommand DBCommand = new OleDbCommand(CommandText, connection);
+
+				try
+				{
+					connection.Open();
+
+					OleDbDataReader DBReader = DBCommand.ExecuteReader();
+
+					if (DBReader.HasRows)
+					{
+						while (DBReader.Read())
+						{
+							accessTable.Rows.Add(new object[] { DBReader[0], DBReader[1], DBReader[2], DBReader[3], DBReader[4], DBReader[5] });
+						}
+					}
+
+					DBReader.Close();
+					connection.Close();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+
+			/*			grid_userTable.DataSource = userTable;*/
+		}
+
+		private void insererUnUtilisateur(int id,String pseudo,String mdp)
+		{
+			string CommandText = "insert into UserTable(UserName,UserPassword,AccessKey_Id) values('"+pseudo+"','"+mdp+"','"+id+"');";
+
+			using (OleDbConnection connection = new OleDbConnection(connectionString))
+			{
+				OleDbCommand command = new OleDbCommand(CommandText, connection);
+
+				OleDbDataAdapter Adapter = new OleDbDataAdapter();
+
+				try
+				{
+					Adapter.InsertCommand = command;
+
+					connection.Open();
+					int buffer = Adapter.InsertCommand.ExecuteNonQuery();
+					connection.Close();
+
+					if (buffer != 0) MessageBox.Show("User successfully inserted");
+					else MessageBox.Show("User not inserted");
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+			recupererUtilisateursDeLaBd();
+		}
+
+		private void supprimerUnUtilisateur()
+		{
+			string CommandText = "DELETE FROM UserTable WHERE UserName = 'STUDENT';";
+
+			using (OleDbConnection connection = new OleDbConnection(connectionString))
+			{
+				OleDbCommand command = new OleDbCommand(CommandText, connection);
+				OleDbDataAdapter Adapter = new OleDbDataAdapter();
+
+				try
+				{
+					Adapter.DeleteCommand = command;
+
+					connection.Open();
+					int buffer = Adapter.DeleteCommand.ExecuteNonQuery();
+					connection.Close();
+
+					if (buffer != 0) MessageBox.Show("User successfully deleted");
+					else MessageBox.Show("User not found");
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+			recupererUtilisateursDeLaBd();
+		}
+
+
+		private void chargerDroitsComboBox()
+		{
+			string CommandText = "SELECT * from AccessTable ORDER BY AccessKey_Id;";
+
+
+			using (OleDbConnection connection = new OleDbConnection(connectionString))
+			{
+				OleDbCommand DBCommand = new OleDbCommand(CommandText, connection);
+
+				try
+				{
+					connection.Open();
+
+					OleDbDataReader DBReader = DBCommand.ExecuteReader();
+
+					if (DBReader.HasRows)
+					{
+						while (DBReader.Read())
+						{
+							int id;
+							int.TryParse(DBReader[0].ToString(), out id);
+							userControl_newuser.input_rightsNewuser.Items.Add(DBReader[1]);
+						}
+					}
+
+					DBReader.Close();
+					connection.Close();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+		}
+
+		private void afficherAjouterUnUtilisateurClick(object sender, EventArgs e)
+		{
+			grid.Visible = false;
+			userControlConfig.Visible = false;
+			graphiqueOuvert = false;
+			graphControl1.Visible = false;
+			userControl_newuser.Visible = true;
+			userControl_Connexion.Visible = false;
+			chargerDroitsComboBox();
+		}
+
+		private void ajouterUtilisateurClick(object sender, EventArgs e)
+		{
+			String pseudo=userControl_newuser.input_usernameNewuser.Text;
+			String mdp = userControl_newuser.input_pwNewuser.Text;
+			int droit = userControl_newuser.input_rightsNewuser.SelectedIndex+1;
+			insererUnUtilisateur(droit, pseudo, mdp);
+			/*if (droitNonConverti == "AdminRights")
+			{
+				droitConverti = 1;
+			}
+			else if (droitNonConverti == "MasterRights")
+			{
+				droitConverti = 2;
+			}
+			else if (droitNonConverti == "MiddleRights")
+			{
+				droitConverti = 3;
+			}
+			else if (droitNonConverti == "BasicRights")
+			{
+				droitConverti = 4;
+			}*/
+
+
+
 		}
 
 	}

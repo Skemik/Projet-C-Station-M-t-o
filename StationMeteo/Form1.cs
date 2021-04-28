@@ -14,7 +14,7 @@ namespace StationMeteo
 {
     public partial class Form1 : Form
     {
-
+        
         int gridColumns = 5;
         int gridRows = 1;
         int boxwidth = 125;
@@ -36,10 +36,19 @@ namespace StationMeteo
             this.Controls.Add(userControlConfig);
             userControlConfig.Visible = false;
             this.userControlConfig.addConfig.Click += new System.EventHandler(addConfig_Click);
+            this.userControl_newuser.submit_newuser.Click += new System.EventHandler(ajouterUtilisateurClick);
             creerUserTable();
             creerAccesTable();
+            recupererAccesDeLaBd();
             MakeDataRelation();
             BindToDataGrid();
+            
+            recupererUtilisateursDeLaBd();
+           
+            /*insererUnUtilisateur();
+            supprimerUnUtilisateur();*/
+            
+           
 
 
         }
@@ -371,5 +380,6 @@ namespace StationMeteo
             graphControl1.Visible = false;
         }
 
+        
     }
 }
