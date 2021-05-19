@@ -15,13 +15,22 @@ namespace StationMeteo
     public partial class Form1 : Form
     {
         
-        int gridColumns = 5;
+        int gridColumns = 6;
         int gridRows = 1;
         int boxwidth = 125;
         int boxheight = 25;
         List<byte> tableInter = new List<byte>();
         DataTable dt = new DataTable();
         static ArrayList listeTram = new ArrayList();
+        Config.UserControl_AddAlarme userControl_AddAlarme;
+        Utilisateur.UserControl_NouveauUtilisateur userControl_newuser;
+        Utilisateur.UserControl_Connexion userControl_Connexion;
+        Utilisateur.UserControl_SupprimerUtilisateur userControl_SupprimerUtilisateur;
+        DataGridView grid_userTable;
+        DataGridView grid_accessTable;
+        DataGridView grid;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -36,20 +45,103 @@ namespace StationMeteo
             this.Controls.Add(userControlConfig);
             userControlConfig.Visible = false;
             this.userControlConfig.addConfig.Click += new System.EventHandler(addConfig_Click);
-            this.userControl_newuser.submit_newuser.Click += new System.EventHandler(ajouterUtilisateurClick);
-            creerUserTable();
-            creerAccesTable();
-            recupererAccesDeLaBd();
-            MakeDataRelation();
-            BindToDataGrid();
             
-            recupererUtilisateursDeLaBd();
-           
-            /*insererUnUtilisateur();
-            supprimerUnUtilisateur();*/
-            
-           
+            //User control Alarme
+            userControl_AddAlarme = new Config.UserControl_AddAlarme();
+            userControl_AddAlarme.Location = new System.Drawing.Point(12, 33);
+            userControl_AddAlarme.Name = "userControl_AddAlarme";
+            userControl_AddAlarme.Size = new System.Drawing.Size(270, 217);
+            userControl_AddAlarme.TabIndex = 18;
+            userControl_AddAlarme.Visible = false;
+            userControl_AddAlarme.submit_alarme.Click+= new System.EventHandler(ajouterAlarme);
+            Controls.Add(userControl_AddAlarme);
 
+            //User control new user
+            userControl_newuser = new Utilisateur.UserControl_NouveauUtilisateur();
+            userControl_newuser.Location = new System.Drawing.Point(12, 33);
+            this.userControl_newuser.Name = "userControl_newuser";
+            this.userControl_newuser.Size = new System.Drawing.Size(294, 299);
+            this.userControl_newuser.TabIndex = 15;
+            this.userControl_newuser.Visible = false;
+            this.userControl_newuser.submit_newuser.Click += new System.EventHandler(ajouterUtilisateurClick);
+            Controls.Add(userControl_newuser);
+
+            // userControl_Connexion
+            userControl_Connexion = new Utilisateur.UserControl_Connexion();
+            userControl_Connexion.Location = new System.Drawing.Point(12, 27);
+            userControl_Connexion.Name = "userControl_Connexion";
+            userControl_Connexion.Size = new System.Drawing.Size(364, 367);
+            userControl_Connexion.TabIndex = 14;
+            userControl_Connexion.Visible = false;
+            Controls.Add(userControl_Connexion);
+
+            // userControl_SupprimerUtilisateur
+            userControl_SupprimerUtilisateur = new Utilisateur.UserControl_SupprimerUtilisateur();
+            this.userControl_SupprimerUtilisateur.Location = new System.Drawing.Point(519, 94);
+            this.userControl_SupprimerUtilisateur.Name = "userControl_SupprimerUtilisateur";
+            this.userControl_SupprimerUtilisateur.Size = new System.Drawing.Size(276, 204);
+            this.userControl_SupprimerUtilisateur.TabIndex = 16;
+            this.userControl_SupprimerUtilisateur.Visible = false;
+            this.userControl_SupprimerUtilisateur.deleteUser_submit.Click += new System.EventHandler(supprimerUtilisateur);
+            Controls.Add(userControl_SupprimerUtilisateur);
+
+            //grid User table
+            grid_userTable = new DataGridView();
+            grid_userTable.AllowUserToAddRows = false;
+            grid_userTable.AllowUserToDeleteRows = false;
+            grid_userTable.AllowUserToOrderColumns = true;
+            grid_userTable.AllowUserToResizeColumns = false;
+            grid_userTable.AllowUserToResizeRows = false;
+            grid_userTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid_userTable.Location = new System.Drawing.Point(12, 48);
+            grid_userTable.Name = "grid_userTable";
+            grid_userTable.RowHeadersVisible = false;
+            grid_userTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            grid_userTable.Size = new System.Drawing.Size(501, 193);
+            grid_userTable.TabIndex = 12;
+            grid_userTable.Visible = false;
+            Controls.Add(grid_userTable);
+
+            //grid Acces Table
+            grid_accessTable = new DataGridView();
+            grid_accessTable.AllowUserToAddRows = false;
+            grid_accessTable.AllowUserToDeleteRows = false;
+            grid_accessTable.AllowUserToOrderColumns = true;
+            grid_accessTable.AllowUserToResizeColumns = false;
+            grid_accessTable.AllowUserToResizeRows = false;
+            grid_accessTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid_accessTable.Location = new System.Drawing.Point(12, 247);
+            grid_accessTable.Name = "grid_accessTable";
+            grid_accessTable.RowHeadersVisible = false;
+            grid_accessTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            grid_accessTable.Size = new System.Drawing.Size(501, 191);
+            grid_accessTable.TabIndex = 13;
+            grid_accessTable.Visible = false;
+            Controls.Add(grid_accessTable);
+
+            //grid trame view 
+            grid = new DataGridView();
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToDeleteRows = false;
+            grid.AllowUserToOrderColumns = true;
+            grid.AllowUserToResizeColumns = false;
+            grid.AllowUserToResizeRows = false;
+            grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid.ColumnHeadersVisible = false;
+            grid.Location = new System.Drawing.Point(12, 61);
+            grid.Name = "grid";
+            grid.RowHeadersVisible = false;
+            grid.Size = new System.Drawing.Size(677, 153);
+            grid.TabIndex = 0;
+            grid.Visible = false;
+            Controls.Add(grid);
+     
+
+
+
+            ConfigDataset();
+            Utilisateur.Tools.Config();
+            Utilisateur.Adapter.Fill(Local_UserAccess, "Local_AccessTable", "AccessTable", grid_accessTable);
 
         }
 
@@ -57,7 +149,7 @@ namespace StationMeteo
         private void Form1_Load(object sender, EventArgs e)
         {
             grid.ColumnCount = gridColumns;
-            grid.Rows.Add("ID", "TYPE", "DATA CONVERTIE", "INTERVALLE MIN", "INTERVALLE MAX");
+            grid.Rows.Add("ID", "TYPE", "DATA CONVERTIE", "INTERVALLE MIN", "INTERVALLE MAX","STATUT");
             for (int i = 0; i < gridColumns; i++)
             {
                 grid.Columns[i].Width = boxwidth;
@@ -341,6 +433,31 @@ namespace StationMeteo
                         grid.Rows[i].Cells[j + 3].Value = trame.intervalleMin;
                         grid.Rows[i].Cells[j + 4].Value = trame.intervalleMax;
                         grid.Rows[i].Cells[j + 2].Value = trame.dataConverti;
+                        if (trame.id == 1)
+                        {
+
+
+                            label_test.Text = "Data recu : " + trame.dataConverti + ", Alarme min:" + trame.alarmeMin + ",Alarme max :" + trame.alarmeMax;
+                        }
+                        if (trame.alarmeMin != 0 || trame.alarmeMax != 0)
+                        {
+                            if (trame.dataConverti <= trame.alarmeMin)
+                            {
+                                grid.Rows[i].Cells[j + 5].Value = "Trop faible !!";
+                            }
+                            else if (trame.dataConverti >= trame.alarmeMax)
+                            {
+                                grid.Rows[i].Cells[j + 5].Value = "Trop Haut !!";
+                            }
+                            else
+                            {
+                                grid.Rows[i].Cells[j + 5].Value = "Normal";
+                            }
+                        }
+                        else
+                        {
+                            grid.Rows[i].Cells[j + 5].Value = "Alarme non défini";
+                        }
                         if (trame.type == 1)
                         {
                             grid.Rows[i].Cells[j + 1].Value = "Température";
@@ -378,8 +495,50 @@ namespace StationMeteo
             userControlConfig.Visible = false;
             graphiqueOuvert = false;
             graphControl1.Visible = false;
+            update_button.Visible = false;
+
+
+            grid_accessTable.Visible = false;
+            grid_userTable.Visible = false;
+            userControlConfig.Visible = false;
+            graphiqueOuvert = false;
+            graphControl1.Visible = false;
+            userControl_newuser.Visible = false;
+            userControl_SupprimerUtilisateur.Visible = false;
+
+            userControl_AddAlarme.Visible = false;
+        }
+
+   
+
+        private void ajouterAlarmeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            userControl_AddAlarme.Visible = true;
+
+            grid.Visible = false;
+            userControlConfig.Visible = false;
+            graphiqueOuvert = false;
+            graphControl1.Visible = false;
+            update_button.Visible = false;
+
+
+            grid_accessTable.Visible = false;
+            grid_userTable.Visible = false;
+            userControlConfig.Visible = false;
+            graphiqueOuvert = false;
+            graphControl1.Visible = false;
+            userControl_newuser.Visible = false;
+            userControl_SupprimerUtilisateur.Visible = false;
         }
 
         
+
+
+
+
+
+
+
+      
     }
 }

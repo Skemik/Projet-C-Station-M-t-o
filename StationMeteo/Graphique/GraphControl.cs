@@ -21,8 +21,8 @@ namespace StationMeteo
             InitializeComponent();
 
             
-        }
 
+        }
         public void ajoutervaleur(int value,int id)
         {
             if (indiceX == 10||idActuel!=id)

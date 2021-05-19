@@ -72,6 +72,12 @@ namespace StationMeteo
 			graphiqueOuvert = false;
 			graphControl1.Visible = false;
 
+			grid_accessTable.Visible = false;
+			grid_userTable.Visible = false;
+			userControl_newuser.Visible = false;
+			userControl_SupprimerUtilisateur.Visible = false;
+			update_button.Visible = false;
+
 
 
 		}
@@ -109,7 +115,7 @@ namespace StationMeteo
 								if (line != null && line.Contains(";"))
 								{
 									tableau = Array.ConvertAll(line.Split(';'), int.Parse);
-									ChargerConfigDansLesTrames(tableau[0], tableau[2], tableau[3]);
+									ChargerConfigDansLesTrames(tableau[0], tableau[2], tableau[3],"Intervalle");
 								}
 							}
 
@@ -135,11 +141,11 @@ namespace StationMeteo
 			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
 			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
-			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
+			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax,"Intervalle");
 			sauvegarderConfigDansUnFichier();
 		}
 
-		public void ChargerConfigDansLesTrames(int id, int intervalleMin, int intervalleMax)
+		public void ChargerConfigDansLesTrames(int id,int min,int max,string intervalleOuAlarme)
 		{
 			if (id < 11 && id > 0)
 			{
@@ -149,13 +155,24 @@ namespace StationMeteo
 
 					if (trame.id == id)
 					{
-						((IdMesure)trame).intervalleMin = intervalleMin;
-						((IdMesure)trame).intervalleMax = intervalleMax;
+						if (intervalleOuAlarme.Equals("Intervalle"))
+						{
+
+							((IdMesure)trame).intervalleMin = min;
+							((IdMesure)trame).intervalleMax = max;
+						}
+						else if (intervalleOuAlarme.Equals("Alarme"))
+						{
+							((IdMesure)trame).alarmeMin = min;
+							((IdMesure)trame).alarmeMax = max;
+						}
 						MettreAJourGrid(((IdMesure)trame));
 						calculDataconvertiTrame(((IdMesure)trame));
 
 					}
 				}
+				
+				
 			}
 		}
 
@@ -167,9 +184,20 @@ namespace StationMeteo
 			int.TryParse(userControlConfig.getintervMinConfig(), out intervalleMin);
 			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
-			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax);
+			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax,"Intervalle");
 		}
 
+
+		private void ajouterAlarme(object sender, EventArgs e)
+		{
+			int id;
+			int AlarmeMin;
+			int AlarmeMax;
+			int.TryParse(userControl_AddAlarme.alarmeMinConfigAlarme.Text, out AlarmeMin);
+			int.TryParse(userControl_AddAlarme.idConfigAlarme.Text, out id);
+			int.TryParse(userControl_AddAlarme.alarmeMaxConfigAlarme.Text, out AlarmeMax);
+			ChargerConfigDansLesTrames(id,AlarmeMin, AlarmeMax,"Alarme");
+		}
 	}
 }
 

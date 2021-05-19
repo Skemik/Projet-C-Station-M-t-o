@@ -31,7 +31,6 @@ namespace StationMeteo
         {
             this.components = new System.ComponentModel.Container();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.grid = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.lireConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,44 +46,24 @@ namespace StationMeteo
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.sauvegarderConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ajouterAlarmeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.afficherLesUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.seConnecterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ajouterUnUtilisateurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.grid_userTable = new System.Windows.Forms.DataGridView();
-            this.grid_accessTable = new System.Windows.Forms.DataGridView();
             this.dataSetUtilisateur = new System.Data.DataSet();
-            this.userControl_newuser = new StationMeteo.Utilisateur.UserControl_NouveauUtilisateur();
-            this.userControl_Connexion = new StationMeteo.Utilisateur.UserControl_Connexion();
+            this.update_button = new System.Windows.Forms.Button();
             this.graphControl1 = new StationMeteo.GraphControl();
-            ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+            this.label_test = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grid_userTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grid_accessTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetUtilisateur)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort
             // 
             this.serialPort.PortName = "COM3";
-            // 
-            // grid
-            // 
-            this.grid.AllowUserToAddRows = false;
-            this.grid.AllowUserToDeleteRows = false;
-            this.grid.AllowUserToOrderColumns = true;
-            this.grid.AllowUserToResizeColumns = false;
-            this.grid.AllowUserToResizeRows = false;
-            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grid.ColumnHeadersVisible = false;
-            this.grid.Location = new System.Drawing.Point(12, 61);
-            this.grid.Name = "grid";
-            this.grid.RowHeadersVisible = false;
-            this.grid.Size = new System.Drawing.Size(677, 153);
-            this.grid.TabIndex = 0;
-            this.grid.Visible = false;
             // 
             // contextMenuStrip1
             // 
@@ -184,7 +163,8 @@ namespace StationMeteo
             // 
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem3,
-            this.sauvegarderConfigurationToolStripMenuItem});
+            this.sauvegarderConfigurationToolStripMenuItem,
+            this.ajouterAlarmeToolStripMenuItem});
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.configurationToolStripMenuItem.Text = "Configuration";
@@ -192,16 +172,23 @@ namespace StationMeteo
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(216, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(260, 22);
             this.toolStripMenuItem3.Text = "Lire Configuration";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.chargerConfig);
             // 
             // sauvegarderConfigurationToolStripMenuItem
             // 
             this.sauvegarderConfigurationToolStripMenuItem.Name = "sauvegarderConfigurationToolStripMenuItem";
-            this.sauvegarderConfigurationToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.sauvegarderConfigurationToolStripMenuItem.Text = "Sauvegarder Configuration";
+            this.sauvegarderConfigurationToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.sauvegarderConfigurationToolStripMenuItem.Text = "Ajouter/Sauvegarder Configuration";
             this.sauvegarderConfigurationToolStripMenuItem.Click += new System.EventHandler(this.sauvegarderConfig);
+            // 
+            // ajouterAlarmeToolStripMenuItem
+            // 
+            this.ajouterAlarmeToolStripMenuItem.Name = "ajouterAlarmeToolStripMenuItem";
+            this.ajouterAlarmeToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.ajouterAlarmeToolStripMenuItem.Text = "Ajouter Alarme";
+            this.ajouterAlarmeToolStripMenuItem.Click += new System.EventHandler(this.ajouterAlarmeToolStripMenuItem_Click);
             // 
             // gestionUtilisateursToolStripMenuItem
             // 
@@ -240,58 +227,20 @@ namespace StationMeteo
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // grid_userTable
-            // 
-            this.grid_userTable.AllowUserToAddRows = false;
-            this.grid_userTable.AllowUserToDeleteRows = false;
-            this.grid_userTable.AllowUserToOrderColumns = true;
-            this.grid_userTable.AllowUserToResizeColumns = false;
-            this.grid_userTable.AllowUserToResizeRows = false;
-            this.grid_userTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grid_userTable.Location = new System.Drawing.Point(12, 48);
-            this.grid_userTable.Name = "grid_userTable";
-            this.grid_userTable.ReadOnly = true;
-            this.grid_userTable.RowHeadersVisible = false;
-            this.grid_userTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.grid_userTable.Size = new System.Drawing.Size(538, 193);
-            this.grid_userTable.TabIndex = 12;
-            this.grid_userTable.Visible = false;
-            // 
-            // grid_accessTable
-            // 
-            this.grid_accessTable.AllowUserToAddRows = false;
-            this.grid_accessTable.AllowUserToDeleteRows = false;
-            this.grid_accessTable.AllowUserToOrderColumns = true;
-            this.grid_accessTable.AllowUserToResizeColumns = false;
-            this.grid_accessTable.AllowUserToResizeRows = false;
-            this.grid_accessTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grid_accessTable.Location = new System.Drawing.Point(12, 247);
-            this.grid_accessTable.Name = "grid_accessTable";
-            this.grid_accessTable.RowHeadersVisible = false;
-            this.grid_accessTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.grid_accessTable.Size = new System.Drawing.Size(538, 191);
-            this.grid_accessTable.TabIndex = 13;
-            this.grid_accessTable.Visible = false;
-            // 
             // dataSetUtilisateur
             // 
             this.dataSetUtilisateur.DataSetName = "NewDataSet";
             // 
-            // userControl_newuser
+            // update_button
             // 
-            this.userControl_newuser.Location = new System.Drawing.Point(12, 33);
-            this.userControl_newuser.Name = "userControl_newuser";
-            this.userControl_newuser.Size = new System.Drawing.Size(294, 299);
-            this.userControl_newuser.TabIndex = 15;
-            this.userControl_newuser.Visible = false;
-            // 
-            // userControl_Connexion
-            // 
-            this.userControl_Connexion.Location = new System.Drawing.Point(12, 27);
-            this.userControl_Connexion.Name = "userControl_Connexion";
-            this.userControl_Connexion.Size = new System.Drawing.Size(364, 367);
-            this.userControl_Connexion.TabIndex = 14;
-            this.userControl_Connexion.Visible = false;
+            this.update_button.Location = new System.Drawing.Point(519, 48);
+            this.update_button.Name = "update_button";
+            this.update_button.Size = new System.Drawing.Size(94, 23);
+            this.update_button.TabIndex = 17;
+            this.update_button.Text = "Mettre à jour";
+            this.update_button.UseVisualStyleBackColor = true;
+            this.update_button.Visible = false;
+            this.update_button.Click += new System.EventHandler(this.update);
             // 
             // graphControl1
             // 
@@ -300,29 +249,33 @@ namespace StationMeteo
             this.graphControl1.Size = new System.Drawing.Size(432, 405);
             this.graphControl1.TabIndex = 11;
             this.graphControl1.Visible = false;
+            this.graphControl1.Load += new System.EventHandler(this.graphControl1_Load);
+            // 
+            // label_test
+            // 
+            this.label_test.AutoSize = true;
+            this.label_test.Location = new System.Drawing.Point(516, 45);
+            this.label_test.Name = "label_test";
+            this.label_test.Size = new System.Drawing.Size(9, 13);
+            this.label_test.TabIndex = 18;
+            this.label_test.Text = "l";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.userControl_newuser);
-            this.Controls.Add(this.userControl_Connexion);
-            this.Controls.Add(this.grid_accessTable);
-            this.Controls.Add(this.grid_userTable);
+            this.Controls.Add(this.label_test);
+            this.Controls.Add(this.update_button);
             this.Controls.Add(this.graphControl1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.grid);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grid_userTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grid_accessTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetUtilisateur)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -332,7 +285,6 @@ namespace StationMeteo
         #endregion
 
         private System.IO.Ports.SerialPort serialPort;
-        private System.Windows.Forms.DataGridView grid;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem lireConfigToolStripMenuItem;
@@ -350,15 +302,14 @@ namespace StationMeteo
         private System.Windows.Forms.ToolStripMenuItem iD5ToolStripMenuItem;
         private GraphControl graphControl1;
         public System.Windows.Forms.Timer timer;
-        private System.Windows.Forms.DataGridView grid_userTable;
-        private System.Windows.Forms.DataGridView grid_accessTable;
         private System.Data.DataSet dataSetUtilisateur;
         private System.Windows.Forms.ToolStripMenuItem gestionUtilisateursToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem afficherLesUtilisateursToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seConnecterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ajouterUnUtilisateurToolStripMenuItem;
-        private Utilisateur.UserControl_NouveauUtilisateur userControl_newuser;
-        private Utilisateur.UserControl_Connexion userControl_Connexion;
+        private System.Windows.Forms.Button update_button;
+        private System.Windows.Forms.ToolStripMenuItem ajouterAlarmeToolStripMenuItem;
+        private System.Windows.Forms.Label label_test;
     }
 }
 

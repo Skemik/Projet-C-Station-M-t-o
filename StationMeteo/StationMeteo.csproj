@@ -50,6 +50,12 @@
     <Compile Include="Config\Configuration.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Config\UserControl_AddAlarme.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Config\UserControl_AddAlarme.Designer.cs">
+      <DependentUpon>UserControl_AddAlarme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,9 +82,11 @@
     <Compile Include="Config\UserControl_config.Designer.cs">
       <DependentUpon>UserControl_config.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utilisateur\Adapter.cs" />
     <Compile Include="Utilisateur\Gestion_utilisateur.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utilisateur\Tools.cs" />
     <Compile Include="Utilisateur\UserControl_Connexion.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,11 +99,23 @@
     <Compile Include="Utilisateur\UserControl_NouveauUtilisateur.Designer.cs">
       <DependentUpon>UserControl_NouveauUtilisateur.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utilisateur\UserControl_SupprimerUtilisateur.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utilisateur\UserControl_SupprimerUtilisateur.Designer.cs">
+      <DependentUpon>UserControl_SupprimerUtilisateur.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Config\UserControl_AddAlarme.resx">
+      <DependentUpon>UserControl_AddAlarme.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graphique\GraphControl.resx">
       <DependentUpon>GraphControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphique\Graphique.resx">
+      <DependentUpon>Graphique.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -114,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Utilisateur\UserControl_NouveauUtilisateur.resx">
       <DependentUpon>UserControl_NouveauUtilisateur.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilisateur\UserControl_SupprimerUtilisateur.resx">
+      <DependentUpon>UserControl_SupprimerUtilisateur.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
