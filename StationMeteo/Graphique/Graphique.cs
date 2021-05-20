@@ -18,73 +18,30 @@ namespace StationMeteo
 		int idgraphiqueAAfficher;
 		public void afficherGraphiqueID1(object sender, EventArgs e)
         {
-
+			cacherTouslesComposantsGraphiques();
 			graphiqueOuvert = true;
 			idgraphiqueAAfficher = 1;
 			graphControl1.Visible = true;
-			grid.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControlConfig.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
+
 
 		}
 		public void afficherGraphiqueID2(object sender, EventArgs e)
 		{
-
+			cacherTouslesComposantsGraphiques();
 			idgraphiqueAAfficher = 2;
 			graphiqueOuvert = true;
 			graphControl1.Visible = true;
-			grid.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControlConfig.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
+
 		}
 		public void afficherGraphiqueID3(object sender, EventArgs e)
 		{
-
+			cacherTouslesComposantsGraphiques();
 			idgraphiqueAAfficher = 3;
 			graphiqueOuvert = true;
 			graphControl1.Visible = true;
-			grid.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControlConfig.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
+
 		}
-		public void afficherGraphiqueID4(object sender, EventArgs e)
-		{
-			idgraphiqueAAfficher = 4;
-			graphiqueOuvert = true;
-			graphControl1.Visible = true;
-			grid.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControlConfig.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
-		}
-		public void afficherGraphiqueID5(object sender, EventArgs e)
-		{
-			idgraphiqueAAfficher = 5;
-			graphiqueOuvert = true;
-			graphControl1.Visible = true;
-			grid.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControlConfig.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
-		}
+
 
     }
 }

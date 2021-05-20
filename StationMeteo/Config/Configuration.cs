@@ -67,16 +67,9 @@ namespace StationMeteo
 		}
 		public void sauvegarderConfig(object sender, EventArgs e)
 		{
-			grid.Visible = false;
+			cacherTouslesComposantsGraphiques();
 			userControlConfig.Visible = true;
-			graphiqueOuvert = false;
-			graphControl1.Visible = false;
 
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControl_newuser.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
 
 
 
@@ -123,13 +116,13 @@ namespace StationMeteo
 					}
 					catch (NullReferenceException s)
 					{
-						MessageBox.Show("La référence n'existe pas !");
+						MessageBox.Show("Mauvais type de fichier !");
 					}
 					catch (Exception s)
                     {
 						MessageBox.Show(s.Message);
-                    }
-				}
+                    }          
+                }
 			}
 		}
 

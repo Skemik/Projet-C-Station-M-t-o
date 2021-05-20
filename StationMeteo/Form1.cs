@@ -20,15 +20,21 @@ namespace StationMeteo
         int boxwidth = 125;
         int boxheight = 25;
         List<byte> tableInter = new List<byte>();
-        DataTable dt = new DataTable();
         static ArrayList listeTram = new ArrayList();
         Config.UserControl_AddAlarme userControl_AddAlarme;
         Utilisateur.UserControl_NouveauUtilisateur userControl_newuser;
         Utilisateur.UserControl_Connexion userControl_Connexion;
         Utilisateur.UserControl_SupprimerUtilisateur userControl_SupprimerUtilisateur;
+        Config.UserControl_portCom userControl_portCom;
         DataGridView grid_userTable;
         DataGridView grid_accessTable;
         DataGridView grid;
+        GraphControl graphControl1;
+        Button update_button;
+        Label label_portcom;
+        TabControl tabControl_users;
+        TabPage tabPage1 = new TabPage();
+        TabPage tabPage2 = new TabPage();
 
 
         public Form1()
@@ -37,11 +43,10 @@ namespace StationMeteo
 
             //UserControl pour save/load Configuration
             this.userControlConfig = new UserControl_config();
-            this.userControlConfig.Location = new System.Drawing.Point(100, 50);
+            this.userControlConfig.Location = new System.Drawing.Point(12, 33);
             this.userControlConfig.Name = "userControlConfig";
             this.userControlConfig.Size = new System.Drawing.Size(370, 393);
             this.userControlConfig.TabIndex = 11;
-            this.userControlConfig.validerConfig.Click += new System.EventHandler(sauverConfig_Click);
             this.Controls.Add(userControlConfig);
             userControlConfig.Visible = false;
             this.userControlConfig.addConfig.Click += new System.EventHandler(addConfig_Click);
@@ -56,16 +61,6 @@ namespace StationMeteo
             userControl_AddAlarme.submit_alarme.Click+= new System.EventHandler(ajouterAlarme);
             Controls.Add(userControl_AddAlarme);
 
-            //User control new user
-            userControl_newuser = new Utilisateur.UserControl_NouveauUtilisateur();
-            userControl_newuser.Location = new System.Drawing.Point(12, 33);
-            this.userControl_newuser.Name = "userControl_newuser";
-            this.userControl_newuser.Size = new System.Drawing.Size(294, 299);
-            this.userControl_newuser.TabIndex = 15;
-            this.userControl_newuser.Visible = false;
-            this.userControl_newuser.submit_newuser.Click += new System.EventHandler(ajouterUtilisateurClick);
-            Controls.Add(userControl_newuser);
-
             // userControl_Connexion
             userControl_Connexion = new Utilisateur.UserControl_Connexion();
             userControl_Connexion.Location = new System.Drawing.Point(12, 27);
@@ -73,17 +68,8 @@ namespace StationMeteo
             userControl_Connexion.Size = new System.Drawing.Size(364, 367);
             userControl_Connexion.TabIndex = 14;
             userControl_Connexion.Visible = false;
+            this.userControl_Connexion.connexion_submit.Click += new System.EventHandler(connexionUtilisateur);
             Controls.Add(userControl_Connexion);
-
-            // userControl_SupprimerUtilisateur
-            userControl_SupprimerUtilisateur = new Utilisateur.UserControl_SupprimerUtilisateur();
-            this.userControl_SupprimerUtilisateur.Location = new System.Drawing.Point(519, 94);
-            this.userControl_SupprimerUtilisateur.Name = "userControl_SupprimerUtilisateur";
-            this.userControl_SupprimerUtilisateur.Size = new System.Drawing.Size(276, 204);
-            this.userControl_SupprimerUtilisateur.TabIndex = 16;
-            this.userControl_SupprimerUtilisateur.Visible = false;
-            this.userControl_SupprimerUtilisateur.deleteUser_submit.Click += new System.EventHandler(supprimerUtilisateur);
-            Controls.Add(userControl_SupprimerUtilisateur);
 
             //grid User table
             grid_userTable = new DataGridView();
@@ -92,11 +78,11 @@ namespace StationMeteo
             grid_userTable.AllowUserToOrderColumns = true;
             grid_userTable.AllowUserToResizeColumns = false;
             grid_userTable.AllowUserToResizeRows = false;
-            grid_userTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            grid_userTable.Location = new System.Drawing.Point(12, 48);
+            grid_userTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid_userTable.Location = new System.Drawing.Point(12, 60);
             grid_userTable.Name = "grid_userTable";
             grid_userTable.RowHeadersVisible = false;
-            grid_userTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            grid_userTable.ScrollBars = ScrollBars.None;
             grid_userTable.Size = new System.Drawing.Size(501, 193);
             grid_userTable.TabIndex = 12;
             grid_userTable.Visible = false;
@@ -109,14 +95,15 @@ namespace StationMeteo
             grid_accessTable.AllowUserToOrderColumns = true;
             grid_accessTable.AllowUserToResizeColumns = false;
             grid_accessTable.AllowUserToResizeRows = false;
-            grid_accessTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            grid_accessTable.Location = new System.Drawing.Point(12, 247);
+            grid_accessTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid_accessTable.Location = new System.Drawing.Point(12, 285);
             grid_accessTable.Name = "grid_accessTable";
             grid_accessTable.RowHeadersVisible = false;
             grid_accessTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
             grid_accessTable.Size = new System.Drawing.Size(501, 191);
             grid_accessTable.TabIndex = 13;
             grid_accessTable.Visible = false;
+            grid_accessTable.ReadOnly = true;
             Controls.Add(grid_accessTable);
 
             //grid trame view 
@@ -126,7 +113,8 @@ namespace StationMeteo
             grid.AllowUserToOrderColumns = true;
             grid.AllowUserToResizeColumns = false;
             grid.AllowUserToResizeRows = false;
-            grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid.ReadOnly = true;
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             grid.ColumnHeadersVisible = false;
             grid.Location = new System.Drawing.Point(12, 61);
             grid.Name = "grid";
@@ -135,14 +123,104 @@ namespace StationMeteo
             grid.TabIndex = 0;
             grid.Visible = false;
             Controls.Add(grid);
-     
 
+
+            //Graphique
+            graphControl1 = new GraphControl();
+            graphControl1.Location = new System.Drawing.Point(12, 33);
+            graphControl1.Name = "graphControl1";
+            graphControl1.Size = new System.Drawing.Size(432, 405);
+            graphControl1.TabIndex = 11;
+            graphControl1.Visible = false;
+            Controls.Add(graphControl1);
+
+
+            //button update 
+            update_button = new Button();
+            update_button.Location = new System.Drawing.Point(215,35);
+            update_button.Name = "update_button";
+            update_button.Size = new System.Drawing.Size(94, 23);
+            update_button.TabIndex = 17;
+            update_button.Text = "Mettre à jour";
+            update_button.UseVisualStyleBackColor = true;
+            update_button.Visible = false;
+            update_button.Click += new System.EventHandler(this.update);
+            Controls.Add(update_button);
+
+            // userControl_portCom
+            userControl_portCom = new Config.UserControl_portCom();
+            userControl_portCom.Location = new System.Drawing.Point(12, 27);
+            userControl_portCom.Name = "userControl_portCom";
+            userControl_portCom.Size = new System.Drawing.Size(303, 236);
+            userControl_portCom.TabIndex = 10;
+            userControl_portCom.Visible = false;
+            userControl_portCom.submit_portCom.Click += new EventHandler(submit_portCOM);
+            Controls.Add(userControl_portCom);
+
+            //Tabcontrol
+            tabControl_users = new TabControl();
+            tabControl_users.Controls.Add(this.tabPage1);
+            tabControl_users.Controls.Add(this.tabPage2);
+            tabControl_users.Location = new System.Drawing.Point(517, 27);
+            tabControl_users.Name = "tabControl_users";
+            tabControl_users.SelectedIndex = 0;
+            tabControl_users.Size = new System.Drawing.Size(283, 240);
+            tabControl_users.TabIndex = 10;
+            tabControl_users.Visible = false;
+            Controls.Add(tabControl_users);
+
+            // tabPage1
+            tabPage1.Location = new System.Drawing.Point(4, 22);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            tabPage1.Size = new System.Drawing.Size(275, 214);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Ajout";
+            tabPage1.UseVisualStyleBackColor = true;
+
+            // userControl_NouveauUtilisateur1
+            userControl_newuser = new Utilisateur.UserControl_NouveauUtilisateur();
+            userControl_newuser.Location = new System.Drawing.Point(6, 3);
+            userControl_newuser.Name = "userControl_NouveauUtilisateur1";
+            userControl_newuser.Size = new System.Drawing.Size(293, 299);
+            userControl_newuser.TabIndex = 0;
+            userControl_newuser.submit_newuser.Click += new System.EventHandler(ajouterUtilisateurClick);
+            tabPage1.Controls.Add(this.userControl_newuser);
+
+            // tabPage2
+            tabPage2.Location = new System.Drawing.Point(4, 22);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            tabPage2.Size = new System.Drawing.Size(275, 214);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Suppression";
+            tabPage2.UseVisualStyleBackColor = true;
+
+            // userControl_SupprimerUtilisateur1
+            userControl_SupprimerUtilisateur = new Utilisateur.UserControl_SupprimerUtilisateur();
+            userControl_SupprimerUtilisateur.Location = new System.Drawing.Point(3, 0);
+            userControl_SupprimerUtilisateur.Name = "userControl_SupprimerUtilisateur";
+            userControl_SupprimerUtilisateur.Size = new System.Drawing.Size(266, 267);
+            userControl_SupprimerUtilisateur.TabIndex = 0;
+            userControl_SupprimerUtilisateur.deleteUser_submit.Click += new System.EventHandler(supprimerUtilisateur);
+            tabPage2.Controls.Add(this.userControl_SupprimerUtilisateur);
+ 
+            // label_portcom
+            label_portcom = new Label();
+            label_portcom.AutoSize = true;
+            label_portcom.Location = new System.Drawing.Point(12, 42);
+            label_portcom.Name = "label_portcom";
+            label_portcom.Size = new System.Drawing.Size(110, 13);
+            label_portcom.TabIndex = 10;
+            label_portcom.Text = "Port COM : Non défini";
+            label_portcom.Visible = false;
+            Controls.Add(label_portcom);
 
 
             ConfigDataset();
             Utilisateur.Tools.Config();
             Utilisateur.Adapter.Fill(Local_UserAccess, "Local_AccessTable", "AccessTable", grid_accessTable);
-
+            gererAccesSelonDroits(access_Id);
         }
 
 
@@ -163,19 +241,7 @@ namespace StationMeteo
             }
             grid.Width = boxwidth * gridColumns + 3;
             grid.Height = boxheight*gridRows+3;
-            try
-            {
-                serialPort.DataReceived += new SerialDataReceivedEventHandler(recupererDonneeBuffer);
-                serialPort.Open();
-            }
-            catch (NullReferenceException d)
-            {
-                MessageBox.Show("Le port choisi n'existe pas !");
-            }
-            catch (Exception d)
-            {
-                MessageBox.Show(d.Message);
-            }
+            
             
 
         }
@@ -433,12 +499,6 @@ namespace StationMeteo
                         grid.Rows[i].Cells[j + 3].Value = trame.intervalleMin;
                         grid.Rows[i].Cells[j + 4].Value = trame.intervalleMax;
                         grid.Rows[i].Cells[j + 2].Value = trame.dataConverti;
-                        if (trame.id == 1)
-                        {
-
-
-                            label_test.Text = "Data recu : " + trame.dataConverti + ", Alarme min:" + trame.alarmeMin + ",Alarme max :" + trame.alarmeMax;
-                        }
                         if (trame.alarmeMin != 0 || trame.alarmeMax != 0)
                         {
                             if (trame.dataConverti <= trame.alarmeMin)
@@ -491,54 +551,68 @@ namespace StationMeteo
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
+            cacherTouslesComposantsGraphiques();
             grid.Visible = true;
-            userControlConfig.Visible = false;
-            graphiqueOuvert = false;
-            graphControl1.Visible = false;
-            update_button.Visible = false;
+            label_portcom.Visible = true;
 
-
-            grid_accessTable.Visible = false;
-            grid_userTable.Visible = false;
-            userControlConfig.Visible = false;
-            graphiqueOuvert = false;
-            graphControl1.Visible = false;
-            userControl_newuser.Visible = false;
-            userControl_SupprimerUtilisateur.Visible = false;
-
-            userControl_AddAlarme.Visible = false;
         }
 
    
 
         private void ajouterAlarmeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            cacherTouslesComposantsGraphiques();
             userControl_AddAlarme.Visible = true;
 
+        }
+
+        private void portCOMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cacherTouslesComposantsGraphiques();
+            userControl_portCom.Visible = true;
+
+        }
+
+
+        private void submit_portCOM(object sender, EventArgs e)
+        {
+            serialPort.Close();
+            serialPort.PortName = userControl_portCom.input_portCom.Text;
+            label_portcom.Text = "Port COM : " + serialPort.PortName;
+            try
+            {
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(recupererDonneeBuffer);
+                serialPort.Open();
+            }
+            catch (NullReferenceException d)
+            {
+                MessageBox.Show("Le port choisi n'existe pas !");
+            }
+            catch (Exception d)
+            {
+                MessageBox.Show(d.Message);
+            }
+        }
+
+        private void cacherTouslesComposantsGraphiques()
+        {
+            userControl_portCom.Visible = false;
+            userControl_AddAlarme.Visible = false;
             grid.Visible = false;
             userControlConfig.Visible = false;
             graphiqueOuvert = false;
             graphControl1.Visible = false;
             update_button.Visible = false;
-
-
             grid_accessTable.Visible = false;
             grid_userTable.Visible = false;
             userControlConfig.Visible = false;
             graphiqueOuvert = false;
-            graphControl1.Visible = false;
-            userControl_newuser.Visible = false;
-            userControl_SupprimerUtilisateur.Visible = false;
+            graphControl1.Visible = false;    
+            userControl_Connexion.Visible = false;
+            label_portcom.Visible = false;
+            tabControl_users.Visible = false;
+
         }
 
-        
-
-
-
-
-
-
-
-      
     }
 }

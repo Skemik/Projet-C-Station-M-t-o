@@ -67,6 +67,7 @@ namespace StationMeteo.Utilisateur
             this.connexion_password.Name = "connexion_password";
             this.connexion_password.Size = new System.Drawing.Size(143, 20);
             this.connexion_password.TabIndex = 8;
+            this.connexion_password.UseSystemPasswordChar = true;
             // 
             // label2
             // 
@@ -109,10 +110,10 @@ namespace StationMeteo.Utilisateur
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button connexion_submit;
-        private System.Windows.Forms.TextBox connexion_password;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label_connexion;
-        private System.Windows.Forms.TextBox connexion_username;
+        public System.Windows.Forms.Button connexion_submit;
+        public System.Windows.Forms.TextBox connexion_password;
+        public System.Windows.Forms.TextBox connexion_username;
     }
 }

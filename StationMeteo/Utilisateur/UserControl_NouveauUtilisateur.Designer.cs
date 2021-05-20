@@ -48,7 +48,7 @@
             this.groupBox_newuser.Controls.Add(this.rights_label);
             this.groupBox_newuser.Controls.Add(this.pw_label);
             this.groupBox_newuser.Controls.Add(this.username_label);
-            this.groupBox_newuser.Location = new System.Drawing.Point(0, 0);
+            this.groupBox_newuser.Location = new System.Drawing.Point(3, 0);
             this.groupBox_newuser.Name = "groupBox_newuser";
             this.groupBox_newuser.Size = new System.Drawing.Size(293, 314);
             this.groupBox_newuser.TabIndex = 0;
@@ -68,21 +68,28 @@
             // input_rightsNewuser
             // 
             this.input_rightsNewuser.FormattingEnabled = true;
-            this.input_rightsNewuser.Location = new System.Drawing.Point(182, 115);
+            this.input_rightsNewuser.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.input_rightsNewuser.Location = new System.Drawing.Point(147, 115);
             this.input_rightsNewuser.Name = "input_rightsNewuser";
             this.input_rightsNewuser.Size = new System.Drawing.Size(100, 21);
             this.input_rightsNewuser.TabIndex = 5;
             // 
             // input_pwNewuser
             // 
-            this.input_pwNewuser.Location = new System.Drawing.Point(182, 84);
+            this.input_pwNewuser.Location = new System.Drawing.Point(147, 84);
             this.input_pwNewuser.Name = "input_pwNewuser";
             this.input_pwNewuser.Size = new System.Drawing.Size(100, 20);
             this.input_pwNewuser.TabIndex = 4;
+            this.input_pwNewuser.UseSystemPasswordChar = true;
             // 
             // input_usernameNewuser
             // 
-            this.input_usernameNewuser.Location = new System.Drawing.Point(182, 51);
+            this.input_usernameNewuser.Location = new System.Drawing.Point(147, 51);
             this.input_usernameNewuser.Name = "input_usernameNewuser";
             this.input_usernameNewuser.Size = new System.Drawing.Size(100, 20);
             this.input_usernameNewuser.TabIndex = 3;

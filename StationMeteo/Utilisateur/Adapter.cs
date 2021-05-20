@@ -14,8 +14,8 @@ namespace StationMeteo.Utilisateur
 		internal static void Insert(string Name,string password,int right)
 		{
 			Tools.Adapter.InsertCommand.Parameters[0].Value = Name;
-			Tools.Adapter.InsertCommand.Parameters[1].Value = "test";
-			Tools.Adapter.InsertCommand.Parameters[2].Value = 5;
+			Tools.Adapter.InsertCommand.Parameters[1].Value = password;
+			Tools.Adapter.InsertCommand.Parameters[2].Value = right;
 
 			try
 			{
@@ -37,6 +37,7 @@ namespace StationMeteo.Utilisateur
 		}
 		internal static void Delete(String Name)
 		{
+		
 			Tools.Adapter.DeleteCommand.Parameters[0].Value = Name;
 
 			try
@@ -96,6 +97,39 @@ namespace StationMeteo.Utilisateur
 			{
 				Tools.connexion.Close();
 			}
+		}
+
+		internal static int SelectUtilisateur(String pseudo,String mdp)
+        {
+			int accessId = 0;
+			string SelectUtilisateur_CommandText = "SELECT Access_Id from UserTable WHERE UserName = '" + pseudo+"' AND UserPassword = '"+mdp+"';";
+
+			OleDbCommand commande;
+
+			try
+			{
+				Tools.connexion.Open();
+				
+				commande =Tools.Adapter.SelectCommand = new OleDbCommand(SelectUtilisateur_CommandText,Tools.connexion);
+
+				OleDbDataReader reader = commande.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+						accessId=(int)reader[0];
+                    }
+                }
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			finally
+			{
+				Tools.connexion.Close();
+			}
+			return accessId;
 		}
 	}
 }

@@ -21,6 +21,9 @@ namespace StationMeteo
 		internal static DataTable Local_UserTable = new DataTable();
 		internal static DataTable Local_AccessTable = new DataTable();
 
+		public int access_Id=0;
+
+
 		private static void ConfigDataset()
 		{
 			DataColumn UserKey_ID = new DataColumn("A", System.Type.GetType("System.Int16"));
@@ -110,48 +113,54 @@ namespace StationMeteo
 
 		private void afficherUtilisateurs(object sender, EventArgs e)
         {
+			cacherTouslesComposantsGraphiques();
 			grid_accessTable.Visible = true;
 			grid_userTable.Visible = true;
-			grid.Visible = false;
-			userControlConfig.Visible = false;
-			graphiqueOuvert = false;
-			graphControl1.Visible = false;
-			userControl_newuser.Visible = false;
 			Utilisateur.Adapter.Fill(Local_UserAccess, "Local_UserTable", "UserTable", grid_userTable);
 			userControl_SupprimerUtilisateur.Visible = true;
 			update_button.Visible = true;
+			tabControl_users.Visible = true;
+			gererAffichageGridUsersAccess();
+
 		}
 
 		private void seConnecter(object sender, EventArgs e)
 		{
+			cacherTouslesComposantsGraphiques();
 			userControl_Connexion.Visible = true;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
+
+
 		}
-		
+		private void connexionUtilisateur(object sender, EventArgs e)
+		{
+			String pseudo = userControl_Connexion.connexion_username.Text;
+			String mdp = userControl_Connexion.connexion_password.Text;
+			access_Id=Utilisateur.Adapter.SelectUtilisateur(pseudo, mdp);
+            if (access_Id != 0)
+            {
+				MessageBox.Show("Vous êtes connecté ! ");
+            }
+            gererAccesSelonDroits(access_Id);
+            userControl_Connexion.Visible = false;
+			
+		}
+
 		private void afficherAjouterUnUtilisateurClick(object sender, EventArgs e)
 		{
-			grid.Visible = false;
-			userControlConfig.Visible = false;
-			graphiqueOuvert = false;
-			graphControl1.Visible = false;
+			cacherTouslesComposantsGraphiques();
 			userControl_newuser.Visible = true;
-			userControl_Connexion.Visible = false;
-			grid_accessTable.Visible = false;
-			grid_userTable.Visible = false;
-			userControl_SupprimerUtilisateur.Visible = false;
-			update_button.Visible = false;
-			/*			chargerDroitsComboBox();*/
+
 		}
 
 		private void ajouterUtilisateurClick(object sender, EventArgs e)
 		{
+			int droit;
 			String pseudo=userControl_newuser.input_usernameNewuser.Text;
 			String mdp = userControl_newuser.input_pwNewuser.Text;
-			int droit = userControl_newuser.input_rightsNewuser.SelectedIndex+1;
+			int.TryParse(userControl_newuser.input_rightsNewuser.Text, out droit);
 			Utilisateur.Adapter.Insert(pseudo,mdp,droit);
 			Utilisateur.Adapter.Fill(Local_UserAccess, "Local_UserTable", "UserTable", grid_userTable);
-			/*		insererUnUtilisateur(droit, pseudo, mdp);*/
+			gererAffichageGridUsersAccess();
 		}
 
 		private void supprimerUtilisateur(object sender, EventArgs e)
@@ -159,6 +168,7 @@ namespace StationMeteo
 			String pseudo = userControl_SupprimerUtilisateur.deleteUser_text.Text;
 			Utilisateur.Adapter.Delete(pseudo);
 			Utilisateur.Adapter.Fill(Local_UserAccess, "Local_UserTable", "UserTable", grid_userTable);
+			gererAffichageGridUsersAccess();
 
 		}
 
@@ -166,7 +176,125 @@ namespace StationMeteo
 		{
 			Utilisateur.Adapter.Update(Local_UserAccess.Tables["Local_UserTable"]);
 			Utilisateur.Adapter.Fill(Local_UserAccess, "Local_UserTable", "UserTable", grid_userTable);
+			gererAccesSelonDroits(access_Id);
+			gererAffichageGridUsersAccess();
+			cacherTouslesComposantsGraphiques();
 
+		}
+
+		private void gererAccesSelonDroits(int accessLevel)
+        {
+            if (accessLevel == 5)
+			{
+				lire_config_toolstrip.Enabled = false;
+				ajouter_config_toolstrip.Enabled = false;
+				ajouter_alarme_toolstrip.Enabled = false;
+				afficher_utilisateurs_toolstrip.Enabled = false;
+
+				seConnecter_toolstrip.Enabled = false;
+				seDeconnecter_toolstrip.Enabled = true;
+				sauve_config_toolstrip.Enabled = false;
+
+
+			}
+			else if (accessLevel==4)
+            {
+				lire_config_toolstrip.Enabled = false;
+				ajouter_config_toolstrip.Enabled = false;
+				ajouter_alarme_toolstrip.Enabled = true;
+				afficher_utilisateurs_toolstrip.Enabled = false;
+				seConnecter_toolstrip.Enabled = false;
+				seDeconnecter_toolstrip.Enabled = true;
+				sauve_config_toolstrip.Enabled = false;
+
+			}
+			else if (accessLevel == 3|| accessLevel == 2)
+			{
+				lire_config_toolstrip.Enabled = true;
+				ajouter_config_toolstrip.Enabled = true;
+				ajouter_alarme_toolstrip.Enabled = true;
+				afficher_utilisateurs_toolstrip.Enabled = false;
+				seConnecter_toolstrip.Enabled = false;
+				seDeconnecter_toolstrip.Enabled = true;
+				sauve_config_toolstrip.Enabled = true;
+			}
+			else if (accessLevel == 1)
+			{
+				lire_config_toolstrip.Enabled = true;
+				ajouter_config_toolstrip.Enabled = true;
+				ajouter_alarme_toolstrip.Enabled = true;
+				afficher_utilisateurs_toolstrip.Enabled = true;
+				seConnecter_toolstrip.Enabled = false;
+				seDeconnecter_toolstrip.Enabled = true;
+				sauve_config_toolstrip.Enabled = true;
+			}
+			else if (accessLevel == 0)
+            {
+				lire_config_toolstrip.Enabled = false;
+				ajouter_config_toolstrip.Enabled = false;
+				ajouter_alarme_toolstrip.Enabled = false;
+				afficher_utilisateurs_toolstrip.Enabled = false;
+				seConnecter_toolstrip.Enabled = true;
+				seDeconnecter_toolstrip.Enabled = false;
+				sauve_config_toolstrip.Enabled = false;
+			}
+		}
+
+		private void deconnexion(object sender, EventArgs e)
+        {
+			access_Id = 0;
+			gererAccesSelonDroits(access_Id);
+			cacherTouslesComposantsGraphiques();
+			MessageBox.Show("Vous vous êtes déconnecté ! ");
+        }
+
+		private void gererAffichageGridUsersAccess()
+        {
+			int rowcountUser = 7;	
+            if (grid_userTable.RowCount <= 7)
+            {
+				grid_userTable.ScrollBars = ScrollBars.None;
+				rowcountUser = grid_userTable.RowCount;
+				tabControl_users.Location = new System.Drawing.Point(517, 27);
+
+			}
+            else
+            {
+
+				grid_userTable.ScrollBars = ScrollBars.Vertical;
+			}
+			for (int i = 0; i < grid_userTable.ColumnCount; i++)
+			{
+				grid_userTable.Columns[i].Width = boxwidth;
+
+
+			}
+            for (int i = 0; i < rowcountUser; i++)
+            {
+                grid_userTable.Rows[i].Height = boxheight;
+
+            }
+            for (int i = 0; i < grid_accessTable.ColumnCount; i++)
+            {
+                grid_accessTable.Columns[i].Width = boxwidth;
+
+
+            }
+            for (int i = 0; i < grid_accessTable.RowCount; i++)
+            {
+                grid_accessTable.Rows[i].Height = boxheight;
+
+            }
+			grid_userTable.Width = boxwidth * grid_userTable.ColumnCount + 3;
+			grid_userTable.Height = boxheight * rowcountUser + 22;
+			if (rowcountUser != grid_userTable.RowCount)
+            {
+				grid_userTable.Width = boxwidth * grid_userTable.ColumnCount + 20;
+				grid_userTable.Height = boxheight * rowcountUser -4;
+				tabControl_users.Location = new System.Drawing.Point(530, 27);
+			}
+            grid_accessTable.Width = boxwidth * grid_accessTable.ColumnCount + 3;
+            grid_accessTable.Height = boxheight * grid_accessTable.RowCount + 20;
 		}
 
 	}

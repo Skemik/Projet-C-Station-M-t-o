@@ -41,21 +41,18 @@ namespace StationMeteo
             this.iD1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iD2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iD3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.iD4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.iD5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.sauvegarderConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ajouterAlarmeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.portCOMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ajouter_alarme_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.ajouter_config_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.lire_config_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.sauve_config_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.afficherLesUtilisateursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.seConnecterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ajouterUnUtilisateurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seConnecter_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.seDeconnecter_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.afficher_utilisateurs_toolstrip = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.dataSetUtilisateur = new System.Data.DataSet();
-            this.update_button = new System.Windows.Forms.Button();
-            this.graphControl1 = new StationMeteo.GraphControl();
-            this.label_test = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetUtilisateur)).BeginInit();
@@ -63,7 +60,7 @@ namespace StationMeteo
             // 
             // serialPort
             // 
-            this.serialPort.PortName = "COM3";
+            this.serialPort.PortName = "COM";
             // 
             // contextMenuStrip1
             // 
@@ -117,9 +114,7 @@ namespace StationMeteo
             this.voirGraphiqueToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.iD1ToolStripMenuItem,
             this.iD2ToolStripMenuItem,
-            this.iD3ToolStripMenuItem,
-            this.iD4ToolStripMenuItem,
-            this.iD5ToolStripMenuItem});
+            this.iD3ToolStripMenuItem});
             this.voirGraphiqueToolStripMenuItem.Name = "voirGraphiqueToolStripMenuItem";
             this.voirGraphiqueToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
             this.voirGraphiqueToolStripMenuItem.Text = "Voir Graphique";
@@ -145,81 +140,83 @@ namespace StationMeteo
             this.iD3ToolStripMenuItem.Text = "ID 3";
             this.iD3ToolStripMenuItem.Click += new System.EventHandler(this.afficherGraphiqueID3);
             // 
-            // iD4ToolStripMenuItem
-            // 
-            this.iD4ToolStripMenuItem.Name = "iD4ToolStripMenuItem";
-            this.iD4ToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.iD4ToolStripMenuItem.Text = "ID 4";
-            this.iD4ToolStripMenuItem.Click += new System.EventHandler(this.afficherGraphiqueID4);
-            // 
-            // iD5ToolStripMenuItem
-            // 
-            this.iD5ToolStripMenuItem.Name = "iD5ToolStripMenuItem";
-            this.iD5ToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.iD5ToolStripMenuItem.Text = "ID 5";
-            this.iD5ToolStripMenuItem.Click += new System.EventHandler(this.afficherGraphiqueID5);
-            // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem3,
-            this.sauvegarderConfigurationToolStripMenuItem,
-            this.ajouterAlarmeToolStripMenuItem});
+            this.portCOMToolStripMenuItem,
+            this.ajouter_alarme_toolstrip,
+            this.ajouter_config_toolstrip,
+            this.lire_config_toolstrip,
+            this.sauve_config_toolstrip});
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.configurationToolStripMenuItem.Text = "Configuration";
             // 
-            // toolStripMenuItem3
+            // portCOMToolStripMenuItem
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(260, 22);
-            this.toolStripMenuItem3.Text = "Lire Configuration";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.chargerConfig);
+            this.portCOMToolStripMenuItem.Name = "portCOMToolStripMenuItem";
+            this.portCOMToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.portCOMToolStripMenuItem.Text = "Port COM";
+            this.portCOMToolStripMenuItem.Click += new System.EventHandler(this.portCOMToolStripMenuItem_Click);
             // 
-            // sauvegarderConfigurationToolStripMenuItem
+            // ajouter_alarme_toolstrip
             // 
-            this.sauvegarderConfigurationToolStripMenuItem.Name = "sauvegarderConfigurationToolStripMenuItem";
-            this.sauvegarderConfigurationToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
-            this.sauvegarderConfigurationToolStripMenuItem.Text = "Ajouter/Sauvegarder Configuration";
-            this.sauvegarderConfigurationToolStripMenuItem.Click += new System.EventHandler(this.sauvegarderConfig);
+            this.ajouter_alarme_toolstrip.Name = "ajouter_alarme_toolstrip";
+            this.ajouter_alarme_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.ajouter_alarme_toolstrip.Text = "Ajouter Alarme";
+            this.ajouter_alarme_toolstrip.Click += new System.EventHandler(this.ajouterAlarmeToolStripMenuItem_Click);
             // 
-            // ajouterAlarmeToolStripMenuItem
+            // ajouter_config_toolstrip
             // 
-            this.ajouterAlarmeToolStripMenuItem.Name = "ajouterAlarmeToolStripMenuItem";
-            this.ajouterAlarmeToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
-            this.ajouterAlarmeToolStripMenuItem.Text = "Ajouter Alarme";
-            this.ajouterAlarmeToolStripMenuItem.Click += new System.EventHandler(this.ajouterAlarmeToolStripMenuItem_Click);
+            this.ajouter_config_toolstrip.Name = "ajouter_config_toolstrip";
+            this.ajouter_config_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.ajouter_config_toolstrip.Text = "Ajouter Intervalle";
+            this.ajouter_config_toolstrip.Click += new System.EventHandler(this.sauvegarderConfig);
+            // 
+            // lire_config_toolstrip
+            // 
+            this.lire_config_toolstrip.Name = "lire_config_toolstrip";
+            this.lire_config_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.lire_config_toolstrip.Text = "Lire Configuration Trames";
+            this.lire_config_toolstrip.Click += new System.EventHandler(this.chargerConfig);
+            // 
+            // sauve_config_toolstrip
+            // 
+            this.sauve_config_toolstrip.Name = "sauve_config_toolstrip";
+            this.sauve_config_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.sauve_config_toolstrip.Text = "Sauvegarder Configuration";
+            this.sauve_config_toolstrip.Click += new System.EventHandler(this.sauverConfig_Click);
             // 
             // gestionUtilisateursToolStripMenuItem
             // 
             this.gestionUtilisateursToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.afficherLesUtilisateursToolStripMenuItem,
-            this.seConnecterToolStripMenuItem,
-            this.ajouterUnUtilisateurToolStripMenuItem});
+            this.seConnecter_toolstrip,
+            this.seDeconnecter_toolstrip,
+            this.afficher_utilisateurs_toolstrip});
             this.gestionUtilisateursToolStripMenuItem.Name = "gestionUtilisateursToolStripMenuItem";
             this.gestionUtilisateursToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
             this.gestionUtilisateursToolStripMenuItem.Text = "Gestion Utilisateurs";
             // 
-            // afficherLesUtilisateursToolStripMenuItem
+            // seConnecter_toolstrip
             // 
-            this.afficherLesUtilisateursToolStripMenuItem.Name = "afficherLesUtilisateursToolStripMenuItem";
-            this.afficherLesUtilisateursToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.afficherLesUtilisateursToolStripMenuItem.Text = "Afficher les Utilisateurs";
-            this.afficherLesUtilisateursToolStripMenuItem.Click += new System.EventHandler(this.afficherUtilisateurs);
+            this.seConnecter_toolstrip.Name = "seConnecter_toolstrip";
+            this.seConnecter_toolstrip.Size = new System.Drawing.Size(194, 22);
+            this.seConnecter_toolstrip.Text = "Se connecter";
+            this.seConnecter_toolstrip.Click += new System.EventHandler(this.seConnecter);
             // 
-            // seConnecterToolStripMenuItem
+            // seDeconnecter_toolstrip
             // 
-            this.seConnecterToolStripMenuItem.Name = "seConnecterToolStripMenuItem";
-            this.seConnecterToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.seConnecterToolStripMenuItem.Text = "Se connecter";
-            this.seConnecterToolStripMenuItem.Click += new System.EventHandler(this.seConnecter);
+            this.seDeconnecter_toolstrip.Name = "seDeconnecter_toolstrip";
+            this.seDeconnecter_toolstrip.Size = new System.Drawing.Size(194, 22);
+            this.seDeconnecter_toolstrip.Text = "Se déconnecter";
+            this.seDeconnecter_toolstrip.Click += new System.EventHandler(this.deconnexion);
             // 
-            // ajouterUnUtilisateurToolStripMenuItem
+            // afficher_utilisateurs_toolstrip
             // 
-            this.ajouterUnUtilisateurToolStripMenuItem.Name = "ajouterUnUtilisateurToolStripMenuItem";
-            this.ajouterUnUtilisateurToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.ajouterUnUtilisateurToolStripMenuItem.Text = "Ajouter un Utilisateur";
-            this.ajouterUnUtilisateurToolStripMenuItem.Click += new System.EventHandler(this.afficherAjouterUnUtilisateurClick);
+            this.afficher_utilisateurs_toolstrip.Name = "afficher_utilisateurs_toolstrip";
+            this.afficher_utilisateurs_toolstrip.Size = new System.Drawing.Size(194, 22);
+            this.afficher_utilisateurs_toolstrip.Text = "Afficher les Utilisateurs";
+            this.afficher_utilisateurs_toolstrip.Click += new System.EventHandler(this.afficherUtilisateurs);
             // 
             // timer
             // 
@@ -231,43 +228,11 @@ namespace StationMeteo
             // 
             this.dataSetUtilisateur.DataSetName = "NewDataSet";
             // 
-            // update_button
-            // 
-            this.update_button.Location = new System.Drawing.Point(519, 48);
-            this.update_button.Name = "update_button";
-            this.update_button.Size = new System.Drawing.Size(94, 23);
-            this.update_button.TabIndex = 17;
-            this.update_button.Text = "Mettre à jour";
-            this.update_button.UseVisualStyleBackColor = true;
-            this.update_button.Visible = false;
-            this.update_button.Click += new System.EventHandler(this.update);
-            // 
-            // graphControl1
-            // 
-            this.graphControl1.Location = new System.Drawing.Point(12, 33);
-            this.graphControl1.Name = "graphControl1";
-            this.graphControl1.Size = new System.Drawing.Size(432, 405);
-            this.graphControl1.TabIndex = 11;
-            this.graphControl1.Visible = false;
-            this.graphControl1.Load += new System.EventHandler(this.graphControl1_Load);
-            // 
-            // label_test
-            // 
-            this.label_test.AutoSize = true;
-            this.label_test.Location = new System.Drawing.Point(516, 45);
-            this.label_test.Name = "label_test";
-            this.label_test.Size = new System.Drawing.Size(9, 13);
-            this.label_test.TabIndex = 18;
-            this.label_test.Text = "l";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label_test);
-            this.Controls.Add(this.update_button);
-            this.Controls.Add(this.graphControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -292,24 +257,22 @@ namespace StationMeteo
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem voirGrid;
         private System.Windows.Forms.ToolStripMenuItem configurationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem sauvegarderConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lire_config_toolstrip;
+        private System.Windows.Forms.ToolStripMenuItem ajouter_config_toolstrip;
         private System.Windows.Forms.ToolStripMenuItem voirGraphiqueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iD1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iD2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iD3ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem iD4ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem iD5ToolStripMenuItem;
-        private GraphControl graphControl1;
+/*        private GraphControl graphControl1;*/
         public System.Windows.Forms.Timer timer;
         private System.Data.DataSet dataSetUtilisateur;
         private System.Windows.Forms.ToolStripMenuItem gestionUtilisateursToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem afficherLesUtilisateursToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem seConnecterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ajouterUnUtilisateurToolStripMenuItem;
-        private System.Windows.Forms.Button update_button;
-        private System.Windows.Forms.ToolStripMenuItem ajouterAlarmeToolStripMenuItem;
-        private System.Windows.Forms.Label label_test;
+        private System.Windows.Forms.ToolStripMenuItem afficher_utilisateurs_toolstrip;
+        private System.Windows.Forms.ToolStripMenuItem seConnecter_toolstrip;
+        private System.Windows.Forms.ToolStripMenuItem ajouter_alarme_toolstrip;
+        private System.Windows.Forms.ToolStripMenuItem portCOMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seDeconnecter_toolstrip;
+        private System.Windows.Forms.ToolStripMenuItem sauve_config_toolstrip;
     }
 }
 
