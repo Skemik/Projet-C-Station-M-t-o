@@ -155,35 +155,35 @@ namespace StationMeteo
             // portCOMToolStripMenuItem
             // 
             this.portCOMToolStripMenuItem.Name = "portCOMToolStripMenuItem";
-            this.portCOMToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.portCOMToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.portCOMToolStripMenuItem.Text = "Port COM";
             this.portCOMToolStripMenuItem.Click += new System.EventHandler(this.portCOMToolStripMenuItem_Click);
             // 
             // ajouter_alarme_toolstrip
             // 
             this.ajouter_alarme_toolstrip.Name = "ajouter_alarme_toolstrip";
-            this.ajouter_alarme_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.ajouter_alarme_toolstrip.Size = new System.Drawing.Size(233, 22);
             this.ajouter_alarme_toolstrip.Text = "Ajouter Alarme";
             this.ajouter_alarme_toolstrip.Click += new System.EventHandler(this.ajouterAlarmeToolStripMenuItem_Click);
             // 
             // ajouter_config_toolstrip
             // 
             this.ajouter_config_toolstrip.Name = "ajouter_config_toolstrip";
-            this.ajouter_config_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.ajouter_config_toolstrip.Size = new System.Drawing.Size(233, 22);
             this.ajouter_config_toolstrip.Text = "Ajouter Intervalle";
             this.ajouter_config_toolstrip.Click += new System.EventHandler(this.sauvegarderConfig);
             // 
             // lire_config_toolstrip
             // 
             this.lire_config_toolstrip.Name = "lire_config_toolstrip";
-            this.lire_config_toolstrip.Size = new System.Drawing.Size(216, 22);
-            this.lire_config_toolstrip.Text = "Lire Configuration Trames";
+            this.lire_config_toolstrip.Size = new System.Drawing.Size(233, 22);
+            this.lire_config_toolstrip.Text = "Charger Configuration Trames";
             this.lire_config_toolstrip.Click += new System.EventHandler(this.chargerConfig);
             // 
             // sauve_config_toolstrip
             // 
             this.sauve_config_toolstrip.Name = "sauve_config_toolstrip";
-            this.sauve_config_toolstrip.Size = new System.Drawing.Size(216, 22);
+            this.sauve_config_toolstrip.Size = new System.Drawing.Size(233, 22);
             this.sauve_config_toolstrip.Text = "Sauvegarder Configuration";
             this.sauve_config_toolstrip.Click += new System.EventHandler(this.sauverConfig_Click);
             // 

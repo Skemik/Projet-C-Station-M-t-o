@@ -557,8 +557,6 @@ namespace StationMeteo
 
         }
 
-   
-
         private void ajouterAlarmeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cacherTouslesComposantsGraphiques();

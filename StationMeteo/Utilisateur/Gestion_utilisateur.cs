@@ -178,7 +178,7 @@ namespace StationMeteo
 			Utilisateur.Adapter.Fill(Local_UserAccess, "Local_UserTable", "UserTable", grid_userTable);
 			gererAccesSelonDroits(access_Id);
 			gererAffichageGridUsersAccess();
-			cacherTouslesComposantsGraphiques();
+			
 
 		}
 
@@ -285,13 +285,16 @@ namespace StationMeteo
                 grid_accessTable.Rows[i].Height = boxheight;
 
             }
-			grid_userTable.Width = boxwidth * grid_userTable.ColumnCount + 3;
-			grid_userTable.Height = boxheight * rowcountUser + 22;
 			if (rowcountUser != grid_userTable.RowCount)
             {
 				grid_userTable.Width = boxwidth * grid_userTable.ColumnCount + 20;
 				grid_userTable.Height = boxheight * rowcountUser -4;
 				tabControl_users.Location = new System.Drawing.Point(530, 27);
+            }
+            else
+            {
+				grid_userTable.Width = boxwidth * grid_userTable.ColumnCount + 3;
+				grid_userTable.Height = boxheight * rowcountUser + 22;
 			}
             grid_accessTable.Width = boxwidth * grid_accessTable.ColumnCount + 3;
             grid_accessTable.Height = boxheight * grid_accessTable.RowCount + 20;
