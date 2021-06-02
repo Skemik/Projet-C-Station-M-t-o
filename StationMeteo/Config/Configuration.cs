@@ -20,6 +20,8 @@ namespace StationMeteo
 
 		public void sauvegarderConfigDansUnFichier()
 		{
+
+			MessageBox.Show("Veuillez choisir l'endroit ou vous voulez sauvegarder la configuration actuelle des intervalles, vous pourrez charger celle-ci lors de votre prochaine utilisation");
 			String contenu = "Les lignes sont composé de cette forme la id;type;intervalleMin;intervalleMax;alarmeMin;alarmeMax\r\nDebut\r\n";
 			foreach (IdBase trame in listeTram)
 			{
@@ -178,6 +180,7 @@ namespace StationMeteo
 			int.TryParse(userControlConfig.getIdConfig(), out id);
 			int.TryParse(userControlConfig.getintervMaxConfig(), out intervalleMax);
 			ChargerConfigDansLesTrames(id, intervalleMin, intervalleMax,"Intervalle");
+			MessageBox.Show("les intervalles pour la trame ID : " + id + " ont été ajouté !");
 		}
 
 
@@ -190,6 +193,7 @@ namespace StationMeteo
 			int.TryParse(userControl_AddAlarme.idConfigAlarme.Text, out id);
 			int.TryParse(userControl_AddAlarme.alarmeMaxConfigAlarme.Text, out AlarmeMax);
 			ChargerConfigDansLesTrames(id,AlarmeMin, AlarmeMax,"Alarme");
+			MessageBox.Show("les alarmes pour la trame ID : " + id + " ont été ajouté !");
 		}
 	}
 }
